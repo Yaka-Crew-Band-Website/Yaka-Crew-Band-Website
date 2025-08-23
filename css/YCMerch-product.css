@@ -1,0 +1,189 @@
+.logo-img {
+  height: 70px;
+  border: 1px solid white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.color-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+}
+.color-swatch:hover {
+  opacity: 0.8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.logo-img {
+  width: 120px;    
+  height: auto;     
+}
+
+.logo-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover; 
+  border-radius: 10px; 
+}
+
+
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 2em;
+  background-color: #111;
+  flex-wrap: wrap;
+}
+
+.logo {
+  border: 1px solid red;
+  padding: 1em;
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  gap: 1.5em;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  border-bottom: 1px solid transparent;
+}
+
+nav a:hover {
+  border-bottom: 1px solid white;
+}
+
+
+
+/* Global */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #202221;
+  color: white;
+  padding-top: 80px; /* Add space for fixed navbar */
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: #202221;
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.logo img {
+  width: 120px;
+  height: auto;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  margin-left: 300px;
+  gap: 40px;
+  position: relative;
+}
+
+.nav-links > li {
+  position: relative;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-bottom: 2px solid transparent;
+  transition: border 0.3s;
+}
+
+.nav-links > li:hover {
+  border-bottom: 2px solid white;
+}
+
+.nav-links > li.active {
+  border-bottom: 2px solid white;
+}
+
+/* Dropdown */
+.gallery-dropdown {
+  position: relative;
+}
+
+.arrow {
+  margin-left: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.gallery-dropdown.active .arrow {
+  transform: rotate(180deg);
+}
+
+.gallery-dropdown:hover .dropdown,
+.gallery-dropdown.active .dropdown {
+  display: block;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 35px;
+  left: 0;
+  background-color: #222;
+  padding: 10px 0;
+  border-radius: 5px;
+  min-width: 120px;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  list-style: none; /* Remove bullet points */
+}
+
+.dropdown li {
+  padding: 8px 15px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  list-style: none; /* Remove bullet points from list items */
+}
+
+.dropdown li:hover {
+  background-color: #333;
+}
+
+.dropdown li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dropdown li a:hover {
+  color: white;
+}
