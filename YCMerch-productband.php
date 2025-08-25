@@ -5,7 +5,6 @@ require_once __DIR__ . '/YCdb_connection.php';
 // Get wristband ID from URL
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-// Fetch wristband details using prepared statement
 $stmt = $pdo->prepare("SELECT * FROM wristband WHERE id = ? LIMIT 1");
 $stmt->execute([$id]);
 $row = $stmt->fetch();
@@ -24,6 +23,7 @@ if ($row) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <meta charset="UTF-8" />
   <title><?= htmlspecialchars($name) ?> - YAKA Crew</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -297,22 +297,41 @@ if ($row) {
     <!-- Top Navigation Bar -->
   <div class="navbar">
     <div class="logo">
+<a href="YCMerch-merch1.php">
       <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo">
-    </div>
+      </a>    </div>
     <ul class="nav-links">
-  <li><a href="YCHome.php">Home</a></li>
-    <li class="gallery-dropdown">
-  Gallery <span class="arrow">&#9662;</span>
-  <ul class="dropdown">
-    <li><a href="YCPosts.php">Music</a></li>      
-    <li><a href="YCGallery.php">Video</a></li>     
-  </ul>
-</li>
-      <li>Blogs</li>
-  <li><a href="YCBooking-index.php">Bookings</a></li>
+      <li><a href="YCHome.php">Home</a></li>
+      <li class="gallery-dropdown">
+        Gallery <span class="arrow">&#9662;</span>
+        <ul class="dropdown">
+          <li><a href="YCPosts.php">Music</a></li>
+          <li><a href="YCGallery.php">Video</a></li>
+        </ul>
+      </li>
+       <li><a href="YCBlogs-index.php">Blogs</a></li>
+      <li><a href="YCBooking-index.php">Bookings</a></li>
       <li><a href="YCEvents.php">Events</a></li>
-        <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
-      </ul>
+      <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+      <li>
+        <a href="YCMerch-cartproducts.php" class="cart-icon" style="position:relative; font-size:1.2rem;">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="merch-cart-count" style="position:absolute; top:-8px; right:-8px; background-color:#956E2F; color:white; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:bold;">0</span>
+        </a>
+      </li>
+    </ul>
+</style>
+<script>
+// Update cart count from sessionStorage or fallback to PHP session if needed
+function updateMerchCartCount() {
+  let count = 0;
+  if (sessionStorage.getItem('merchCartCount')) {
+    count = parseInt(sessionStorage.getItem('merchCartCount'));
+  }
+  document.getElementById('merch-cart-count').textContent = count;
+}
+document.addEventListener('DOMContentLoaded', updateMerchCartCount);
+</script>
     </div>
 </header>
 
@@ -338,23 +357,21 @@ if ($row) {
 
     <aside class="info-card">
       <div>
-        <h1 class="product-title"><?= htmlspecialchars($name) ?></h1>
-        <div class="subhead"><?= htmlspecialchars($caption) ?></div>
-        <span class="price-tag">Rs. <?= number_format($price, 2) ?></span>
-    <p class="desc"><?= nl2br(htmlspecialchars($row['description'] ?? 'No description available.')) ?></p>
+  <h1 class="product-title"><?= htmlspecialchars($name) ?></h1>
+  <div class="subhead"><?= htmlspecialchars($caption) ?></div>
+  <span class="price-tag">Rs. <?= number_format($price, 2) ?></span>
 
-  <form method="POST" action="YCMerch-wristbandorders.php">
-          <input type="hidden" name="band_id" value="<?= $id ?>" />
-          <input type="hidden" name="price" value="<?= htmlspecialchars($price) ?>" />
+  <form method="POST" action="YCMerch-checkout.php" id="bandOrderForm">
+    <input type="hidden" name="band_id" value="<?= $id ?>" />
+    <input type="hidden" name="price" value="<?= htmlspecialchars($price) ?>" />
 
-          <label for="quantity">Quantity:</label>
-          <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" required />
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" required />
 
-          <div style="display:flex; gap:16px; flex-wrap:wrap;">
-            <button type="button" class="add-to-cart-btn" style="flex:1; min-width:120px;">Add to Cart</button>
-            <button type="submit" name="buy_now" class="add-to-cart-btn" style="flex:1; min-width:120px;">Buy Now</button>
-          </div>
-        </form>
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+      <button type="button" class="add-to-cart-btn" id="addToCartBtn" style="flex:1; min-width:120px;">Add to Cart</button>
+    </div>
+  </form>
       </div>
     </aside>
   </section>
@@ -371,7 +388,19 @@ if ($row) {
       thumb.classList.add("active");
     });
   });
+
+  // Add to Cart button logic for wristband
+  document.getElementById('addToCartBtn').addEventListener('click', function() {
+    const bandId = <?= json_encode($id) ?>;
+    const price = <?= json_encode($price) ?>;
+    const quantity = parseInt(document.getElementById('quantity').value) || 1;
+    const total = price * quantity;
+    // Navigate to cart summary with GET params
+    const url = `YCMerch-cartproducts.php?band_id=${bandId}&quantity=${quantity}&total=${total}`;
+    window.location.href = url;
+  });
 </script>
 
 </body>
+</html>
 </html>
