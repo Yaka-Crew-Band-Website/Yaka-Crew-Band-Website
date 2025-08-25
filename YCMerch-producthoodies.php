@@ -14,7 +14,6 @@ if ($row) {
   $name = $row['name'];
   $price = $row['price'];
   $caption = $row['caption'];
-  $description = $row['description'] ?? 'No description available.';
   $image_black_front = !empty($row['image_black_front']) ? 'uploads/YCMerch-uploads/' . $row['image_black_front'] : '';
   $image_black_back = !empty($row['image_black_back']) ? 'uploads/YCMerch-uploads/' . $row['image_black_back'] : '';
   $image_white_front = !empty($row['image_white_front']) ? 'uploads/YCMerch-uploads/' . $row['image_white_front'] : '';
@@ -26,6 +25,7 @@ if ($row) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <meta charset="UTF-8" />
   <title><?= htmlspecialchars($name) ?> - YAKA Crew</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -307,22 +307,41 @@ if ($row) {
  <!-- Top Navigation Bar -->
   <div class="navbar">
     <div class="logo">
+<a href="YCMerch-merch1.php">
       <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo">
-    </div>
+      </a>    </div>
     <ul class="nav-links">
-  <li><a href="YCHome.php">Home</a></li>
-    <li class="gallery-dropdown">
-  Gallery <span class="arrow">&#9662;</span>
-  <ul class="dropdown">
-    <li><a href="YCPosts.php">Music</a></li>      
-    <li><a href="YCGallery.php">Video</a></li>     
-  </ul>
-</li>
-      <li>Blogs</li>
-  <li><a href="YCBooking-index.php">Bookings</a></li>
+      <li><a href="YCHome.php">Home</a></li>
+      <li class="gallery-dropdown">
+        Gallery <span class="arrow">&#9662;</span>
+        <ul class="dropdown">
+          <li><a href="YCPosts.php">Music</a></li>
+          <li><a href="YCGallery.php">Video</a></li>
+        </ul>
+      </li>
+         <li><a href="YCBlogs-index.php">Blogs</a></li>
+      <li><a href="YCBooking-index.php">Bookings</a></li>
       <li><a href="YCEvents.php">Events</a></li>
-        <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
-      </ul>
+      <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+      <li>
+        <a href="YCMerch-cartproducts.php" class="cart-icon" style="position:relative; font-size:1.2rem;">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="merch-cart-count" style="position:absolute; top:-8px; right:-8px; background-color:#956E2F; color:white; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:bold;">0</span>
+        </a>
+      </li>
+    </ul>
+</style>
+<script>
+// Update cart count from sessionStorage or fallback to PHP session if needed
+function updateMerchCartCount() {
+  let count = 0;
+  if (sessionStorage.getItem('merchCartCount')) {
+    count = parseInt(sessionStorage.getItem('merchCartCount'));
+  }
+  document.getElementById('merch-cart-count').textContent = count;
+}
+document.addEventListener('DOMContentLoaded', updateMerchCartCount);
+</script>
     </div>
 </header>
 
@@ -361,9 +380,8 @@ if ($row) {
         <h1 class="product-title"><?= htmlspecialchars($name) ?></h1>
         <div class="subhead"><?= htmlspecialchars($caption) ?></div>
         <span class="price-tag">Rs. <?= number_format($price, 2) ?></span>
-        <p class="desc"><?= nl2br(htmlspecialchars($description)) ?></p>
 
-  <form method="POST" action="YCMerch-cart.php">
+  <form method="POST" action="YCMerch-checkout.php">
           <input type="hidden" name="product_id" value="<?= $id ?>" />
 
           <label for="color">Color:</label>
@@ -386,8 +404,7 @@ if ($row) {
           <input type="number" id="quantity" name="quantity" value="1" min="1" max="99" required />
 
           <div style="display:flex; gap:16px; flex-wrap:wrap;">
-            <button type="button" class="add-to-cart-btn" style="flex:1; min-width:120px;">Add to Cart</button>
-            <button type="submit" name="buy_now" class="add-to-cart-btn" style="flex:1; min-width:120px;">Buy Now</button>
+            <button type="button" class="add-to-cart-btn" id="addToCartBtn" style="flex:1; min-width:120px;">Add to Cart</button>
           </div>
         </form>
       </div>
@@ -396,6 +413,21 @@ if ($row) {
 </main>
 
 <script>
+// --- Add to Cart button logic for hoodies ---
+document.getElementById('addToCartBtn').addEventListener('click', function() {
+  const productId = "<?= $id ?>";
+  const price = "<?= $price ?>";
+  const size = document.getElementById('size').value;
+  const color = document.getElementById('color').value;
+  const quantity = document.getElementById('quantity').value;
+  if (!size || !color || !quantity) {
+    alert('Please select color, size, and quantity.');
+    return;
+  }
+  const totalCost = (parseFloat(price) * parseInt(quantity)).toFixed(2);
+  // Pass totalCost to YCMerch-cartproducts.php
+  window.location.href = `YCMerch-cartproducts.php?hoodie_id=${encodeURIComponent(productId)}&size=${encodeURIComponent(size)}&color=${encodeURIComponent(color)}&quantity=${encodeURIComponent(quantity)}&totalcost=${encodeURIComponent(totalCost)}`;
+});
   const thumbs = document.querySelectorAll(".thumb");
   const mainImage = document.getElementById("mainImage");
   const colorSelect = document.getElementById("color");
@@ -441,4 +473,5 @@ if ($row) {
 </script>
 
 </body>
+</html>
 </html>
