@@ -229,12 +229,12 @@ input:focus {
 }
 
 .event-date::before {
-    content: "ðŸ“…";
+    content: "📅";
     margin-right: 8px;
 }
 
 .event-location::before {
-    content: "ðŸ“";
+    content: "📍";
     margin-right: 8px;
 }
 
