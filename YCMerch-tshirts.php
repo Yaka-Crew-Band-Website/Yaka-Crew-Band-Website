@@ -7,6 +7,8 @@ $tshirts = $stmt->fetchAll();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/YCEvents.css" />
   <style>
     .section-title {
       margin-top: 90px;
@@ -182,22 +184,43 @@ $tshirts = $stmt->fetchAll();
    <!-- Top Navigation Bar -->
   <div class="navbar">
     <div class="logo">
+<a href="YCMerch-merch1.php">
       <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo">
-    </div>
+      </a>    </div>
     <ul class="nav-links">
-  <li><a href="YCHome.php">Home</a></li>
-    <li class="gallery-dropdown">
-  Gallery <span class="arrow">&#9662;</span>
-  <ul class="dropdown">
-    <li><a href="YCPosts.php">Music</a></li>      
-    <li><a href="YCGallery.php">Video</a></li>     
-  </ul>
-</li>
-      <li>Blogs</li>
-      <li>Bookings</li>
+      <li><a href="YCHome.php">Home</a></li>
+      <li class="gallery-dropdown">
+        Gallery <span class="arrow">&#9662;</span>
+        <ul class="dropdown">
+          <li><a href="YCPosts.php">Music</a></li>
+          <li><a href="YCGallery.php">Video</a></li>
+        </ul>
+      </li>
+         <li><a href="YCBlogs-index.php">Blogs</a></li>
+      <li><a href="YCBooking-index.php">Bookings</a></li>
       <li><a href="YCEvents.php">Events</a></li>
-        <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
-      </ul>
+      <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+      <li>
+        <a href="YCMerch-cartproducts.php" class="cart-icon" style="position:relative; font-size:1.2rem;">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="merch-cart-count" style="position:absolute; top:-8px; right:-8px; background-color:#956E2F; color:white; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:bold;">
+            <?php echo isset($_SESSION['cart_count']) ? $_SESSION['cart_count'] : 0; ?>
+          </span>
+        </a>
+      </li>
+    </ul>
+</style>
+<script>
+// Update cart count from sessionStorage or fallback to PHP session if needed
+function updateMerchCartCount() {
+  let count = 0;
+  if (sessionStorage.getItem('merchCartCount')) {
+    count = parseInt(sessionStorage.getItem('merchCartCount'));
+  }
+  document.getElementById('merch-cart-count').textContent = count;
+}
+document.addEventListener('DOMContentLoaded', updateMerchCartCount);
+</script>
     </div>
 
   <h1 class="section-title">BAND T‑SHIRTS</h1>
