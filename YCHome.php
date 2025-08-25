@@ -49,8 +49,8 @@ foreach ($candidates as $rel) {
     <li class="gallery-dropdown">
   Gallery <span class="arrow">&#9662;</span>
   <ul class="dropdown">
-    <li><a href="YCPosts.php">Music</a></li>      <!-- ✅ Correct PHP file -->
-    <li><a href="YCGallery.php">Video</a></li>     <!-- ✅ Correct PHP file -->
+    <li><a href="YCPosts.php">Music</a></li>
+    <li><a href="YCGallery.php">Video</a></li>
   </ul>
       <li><a href="YCBlogs-index.php">Blogs</a></li>
     <li><a href="YCBooking-index.php">Bookings</a></li>
