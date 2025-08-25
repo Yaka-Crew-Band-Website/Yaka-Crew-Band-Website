@@ -61,7 +61,8 @@ foreach ($candidates as $rel) {
 
   <div class="hero-section">
     <div class="hero-left">
-      <h1>Yaka<br />Crew</h1>
+      <br/><br/><br/><br/>
+      <h1>Yaka Crew</h1>
     </div>
     <div class="hero-right">
       <?php if ($bgVideo): ?>
