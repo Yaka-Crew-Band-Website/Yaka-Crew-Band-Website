@@ -3,7 +3,6 @@ require_once __DIR__ . '/YCdb_connection.php';
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-// Fetch product using prepared statement
 $stmt = $pdo->prepare("SELECT * FROM tshirts WHERE id = ? LIMIT 1");
 $stmt->execute([$id]);
 $row = $stmt->fetch();
@@ -12,7 +11,6 @@ if ($row) {
   $name = $row['name'];
   $price = $row['price'];
   $caption = $row['caption'];
-  $description = $row['description'] ?? 'No description available.';
   $image_black_front = $row['image_black_front'] ?? '';
   $image_black_back = $row['image_black_back'] ?? '';
   $image_white_front = $row['image_white_front'] ?? '';
@@ -21,7 +19,6 @@ if ($row) {
   die("Product not found.");
 }
 
-// Handle add to cart POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $product_id = (int)$_POST['product_id'];
     $product_name = $name; // from fetched product
@@ -42,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     * {
       margin: 0;
@@ -125,7 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
   border-bottom: 2px solid white;
 }
 
-/* Single underline fix: keep underline on <li>, never on <a> (prevents double lines) */
 .nav-links > li > a,
 .nav-links > li > a:link,
 .nav-links > li > a:visited,
@@ -373,22 +370,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
   <!-- Top Navigation Bar -->
   <div class="navbar">
     <div class="logo">
+<a href="YCMerch-merch1.php">
       <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo">
-    </div>
+      </a>    </div>
     <ul class="nav-links">
-  <li><a href="YCHome.php">Home</a></li>
-    <li class="gallery-dropdown">
-  Gallery <span class="arrow">&#9662;</span>
-  <ul class="dropdown">
-    <li><a href="YCPosts.php">Music</a></li>      
-    <li><a href="YCGallery.php">Video</a></li>     
-  </ul>
-</li>
-      <li>Blogs</li>
-      <li>Bookings</li>
+      <li><a href="YCHome.php">Home</a></li>
+      <li class="gallery-dropdown">
+        Gallery <span class="arrow">&#9662;</span>
+        <ul class="dropdown">
+          <li><a href="YCPosts.php">Music</a></li>
+          <li><a href="YCGallery.php">Video</a></li>
+        </ul>
+      </li>
+         <li><a href="YCBlogs-index.php">Blogs</a></li>
+      <li><a href="YCBooking-index.php">Bookings</a></li>
       <li><a href="YCEvents.php">Events</a></li>
-        <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
-      </ul>
+      <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+      <li>
+        <a href="YCMerch-cartproducts.php" class="cart-icon" style="position:relative; font-size:1.2rem;">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="merch-cart-count" style="position:absolute; top:-8px; right:-8px; background-color:#956E2F; color:white; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:bold;">0</span>
+        </a>
+      </li>
+    </ul>
+</style>
+<script>
+// Update cart count from sessionStorage or fallback to PHP session if needed
+function updateMerchCartCount() {
+  let count = 0;
+  if (sessionStorage.getItem('merchCartCount')) {
+    count = parseInt(sessionStorage.getItem('merchCartCount'));
+  }
+  document.getElementById('merch-cart-count').textContent = count;
+}
+document.addEventListener('DOMContentLoaded', updateMerchCartCount);
+</script>
     </div>
 </header>
 
@@ -425,12 +441,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
 
     <aside class="info-card">
       <div>
-        <h1 class="product-title"><?= htmlspecialchars($name) ?></h1>
-        <div class="subhead"><?= htmlspecialchars($caption) ?></div>
-        <span class="price-tag">Rs. <?= number_format($price, 2) ?></span>
-        <p class="desc"><?= nl2br(htmlspecialchars($description)) ?></p>
+  <h1 class="product-title"><?= htmlspecialchars($name) ?></h1>
+  <div class="subhead"><?= htmlspecialchars($caption) ?></div>
+  <span class="price-tag">Rs. <?= number_format($price, 2) ?></span>
 
-  <form id="addToCartForm" method="POST" action="YCMerch-cart.php">
+  <form id="addToCartForm" method="POST" action="YCMerch-checkout.php">
           <input type="hidden" name="product_id" value="<?= $id ?>" />
 
 
@@ -463,8 +478,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
           />
 
           <div style="display:flex; gap:16px; flex-wrap:wrap;">
-            <button type="button" class="add-to-cart-btn" style="flex:1; min-width:120px;">Add to Cart</button>
-            <button type="submit" class="add-to-cart-btn" style="flex:1; min-width:120px;">Buy Now</button>
+            <button type="button" class="add-to-cart-btn" id="addToCartBtn" style="flex:1; min-width:120px;">Add to Cart</button>
+            <!-- Buy Now button removed -->
           </div>
 
         </form>
@@ -474,6 +489,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
 </main>
 
 <script>
+// --- Add to Cart button logic for t-shirts ---
+document.getElementById('addToCartBtn').addEventListener('click', function() {
+  const productId = "<?= $id ?>";
+  const price = "<?= $price ?>";
+  const size = document.getElementById('size').value;
+  const color = document.getElementById('color').value;
+  const quantity = document.getElementById('quantity').value;
+  if (!size || !color || !quantity) {
+    alert('Please select color, size, and quantity.');
+    return;
+  }
+  // Update cart count in sessionStorage immediately
+  let count = 0;
+  if (sessionStorage.getItem('merchCartCount')) {
+    count = parseInt(sessionStorage.getItem('merchCartCount'));
+  }
+  count += parseInt(quantity);
+  sessionStorage.setItem('merchCartCount', count);
+  if (document.getElementById('merch-cart-count')) {
+    document.getElementById('merch-cart-count').textContent = count;
+  }
+  const totalCost = (parseFloat(price) * parseInt(quantity)).toFixed(2);
+  // Pass totalCost to YCMerch-cartproducts.php
+  window.location.href = `YCMerch-cartproducts.php?product_id=${encodeURIComponent(productId)}&size=${encodeURIComponent(size)}&color=${encodeURIComponent(color)}&quantity=${encodeURIComponent(quantity)}&totalcost=${encodeURIComponent(totalCost)}`;
+});
+
 // --- Image switching logic for t-shirt color and thumbnails ---
 const thumbs = document.querySelectorAll(".thumb");
 const mainImage = document.getElementById("mainImage");
