@@ -334,33 +334,36 @@
 </head>
 
 <body>
-
-  <!-- Top Navigation Bar -->
+  
+ <!-- Top Navigation Bar -->
   <div class="navbar">
     <div class="logo">
-      <a href="YCHome.php">
       <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo">
-      </a>
     </div>
     <ul class="nav-links">
   <li><a href="YCHome.php">Home</a></li>
     <li class="gallery-dropdown">
   Gallery <span class="arrow">&#9662;</span>
   <ul class="dropdown">
-    <li><a href="YCPosts.php">Music</a></li>      
-    <li><a href="YCGallery.php">Video</a></li>     
+    <li><a href="YCPosts.php">Music</a></li>      <!-- ✅ Correct PHP file -->
+    <li><a href="YCGallery.php">Video</a></li>     <!-- ✅ Correct PHP file -->
   </ul>
-</li>
-      <li><a href="YCBlogs-index.php">Blogs</a></li>
-      <li><a href="YCBooking-index.php">Bookings</a></li>
+       <li><a href="YCBlogs-index.php">Blogs</a></li>
+  <li><a href="YCBooking-index.php">Bookings</a></li>
       <li><a href="YCEvents.php">Events</a></li>
-        <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
-        <li>
-        <a href="YCMerch-cartproducts.php" class="cart-icon" style="position:relative; font-size:1.2rem;">
+       <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+      <li>
+    <a href="YCMerch-cartproducts.php" class="cart-icon" style="position:relative; font-size:1.2rem;">
           <i class="fas fa-shopping-cart"></i>
           <span class="cart-count" id="merch-cart-count" style="position:absolute; top:-8px; right:-8px; background-color:#956E2F; color:white; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:bold;">0</span>
         </a>
-</style>
+      </li>
+    </ul>
+    <button class="mobile-menu-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  
 <script>
 // Update cart count from sessionStorage or fallback to PHP session if needed
 function updateMerchCartCount() {
