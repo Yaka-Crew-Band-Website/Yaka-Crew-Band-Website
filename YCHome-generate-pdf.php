@@ -45,3 +45,4 @@ if ($whatsNew && (!empty($whatsNew['title']) || !empty($whatsNew['description'])
 }
 $pdf->Output('D', 'YakaCrew_Home_Report.pdf');
 exit;
+?>
