@@ -211,19 +211,38 @@ $whatsNewItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <ul class="view-dropdown-menu">
   <li><a href="YCHome.php">Home</a></li>
         <li class="gallery-submenu">
-          <a href="YCGalleryadmin.php?page=gallery">Gallery ▶</a>
+                <a id="galleryViewDropdownLink" role="button" tabindex="0" style="cursor:pointer;">Gallery ▶</a>
           <ul class="gallery-submenu-items">
             <li><a href="YCPosts.php">Music</a></li>
             <li><a href="YCGallery.php">Video</a></li>
           </ul>
         </li>
-  <li><a href="YCGalleryadmin.php?page=bookings">Bookings</a></li>
+  <li><a href="YCBooking-index.php">Bookings</a></li>
   <li><a href="YCEvents.php">Events</a></li>
-  <li><a href="YCGalleryadmin.php?page=blogs">Blogs</a></li>
+  <li><a href="YCBlogs-index.php">Blogs</a></li>
    <li><a href="YCMerch-merch1.php">Merchandise</a></li>
       </ul>
-    </div>
-    <a href="YClogin.php?action=logout" class="logout-btn">Logout</a>
+    </div><a href="YCHome-generate-pdf.php" target="_blank" class="pdf-btn-custom">Generate PDF Report</a>
+     <style>
+    .pdf-btn-custom {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border: 1px solid #654922;
+      background-color: #000000;
+      font-weight: 500;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+    
+      text-align: center;
+      cursor: pointer;
+    }
+    .pdf-btn-custom:hover {
+      background-color: #654922;
+      color: #fff;
+    }
+  </style>
+        <a href="YClogin.php?action=logout" class="logout-btn">Logout</a>
   </div>
 </div>
 
