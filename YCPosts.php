@@ -27,6 +27,14 @@ $categories = $category_stmt->fetchAll();
   <title>Yaka Crew - Posts & Events</title>
   <?php $cssv = @filemtime(__DIR__ . '/css/YCGalleryposts-style.css') ?: time(); ?>
   <link rel="stylesheet" href="css/YCGalleryposts-style.css?v=<?php echo $cssv; ?>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+  .like-btn { background: none; border: none; cursor: pointer; font-size: 1.3em; color: #fff; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
+  .like-btn .fa-heart, .like-btn .fa-solid.fa-heart { color: #fff !important; transition: color 0.2s; font-weight: 900; }
+  .like-btn.liked .fa-heart, .like-btn.liked .fa-solid.fa-heart { color: #ffffffff !important; }
+  .like-btn:hover .fa-heart, .like-btn:hover .fa-solid.fa-heart { color: #f8f8f8ff !important; }
+  .like-count { font-size: 0.95em; color: #fff; margin-left: 2px; }
+  </style>
 </head>
 <body>
   <!-- Top Navigation Bar -->
@@ -77,6 +85,12 @@ $categories = $category_stmt->fetchAll();
           if (!empty($post['location'])) {
             echo '<p>' . htmlspecialchars($post['location']) . '</p>';
           }
+          // Like button (DB-backed, Font Awesome white heart)
+          $likeId = 'post-' . $post['id'];
+          $likeCount = isset($post['likes']) ? (int)$post['likes'] : 0;
+          echo '<button class="like-btn" data-like-id="' . $likeId . '" data-post-id="' . $post['id'] . '">
+            <i class="fa-solid fa-heart"></i> <span class="like-count">' . $likeCount . '</span>
+          </button>';
           echo '</div>';
           if (!empty($post['image_path'])) {
             // Check for post image in source/Gallery/YCposts first, then uploads/Gallery/YCposts
@@ -115,6 +129,39 @@ $categories = $category_stmt->fetchAll();
     </div>
   </div>
 
+<script>
+// Like button logic: DB-backed, only one like per post per browser
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.like-btn').forEach(function(btn) {
+    const likeId = btn.getAttribute('data-like-id');
+    const postId = btn.getAttribute('data-post-id');
+    const countSpan = btn.querySelector('.like-count');
+    let liked = localStorage.getItem(likeId + '-liked') === '1';
+    if (liked) {
+      btn.classList.add('liked');
+      btn.disabled = true;
+    }
+    btn.addEventListener('click', function() {
+      if (btn.disabled) return;
+      // AJAX to like_post.php
+      fetch('like_post.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'post_id=' + encodeURIComponent(postId)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          countSpan.textContent = data.likes;
+          localStorage.setItem(likeId + '-liked', '1');
+          btn.classList.add('liked');
+          btn.disabled = true;
+        }
+      });
+    });
+  });
+});
+</script>
 </body>
 </html>
 
