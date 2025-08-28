@@ -1,31 +1,17 @@
 <?php
-session_start();
-// Require admin login for access
-if (!isset($_SESSION['admin'])) {
-  header('Location: ../YClogin.php');
-  exit();
-}
+// No login required for admin page (public access)
 require_once __DIR__ . '/../YCdb_connection.php';
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 // Handle booking deletion
 if (isset($_GET['page']) && $_GET['page'] === 'delete_booking' && isset($_GET['id'])) {
   $delete_id = intval($_GET['id']);
   try {
-    // Debug: Output the ID being deleted (remove/comment after debugging)
-    // echo '<div style="color:yellow;background:#222;padding:8px;">Trying to delete booking with ID: '.htmlspecialchars($delete_id).'</div>';
     $stmt = $pdo->prepare('DELETE FROM bookings WHERE id = ?');
     $stmt->execute([$delete_id]);
-    if ($stmt->rowCount() > 0) {
-      header('Location: YCBooking_admin.php?page=bookings&delete=success');
-      exit();
-    } else {
-      // Debug: No row deleted, show error
-      header('Location: YCBooking_admin.php?page=bookings&delete=notfound');
-      exit();
-    }
+    header('Location: YCBooking_admin.php?page=bookings&delete=success');
+    exit();
   } catch (PDOException $e) {
-    // Debug: Show error message in URL (remove/comment after debugging)
-    header('Location: YCBooking_admin.php?page=bookings&delete=error&msg='.urlencode($e->getMessage()));
+    header('Location: YCBooking_admin.php?page=bookings&delete=error');
     exit();
   }
 }
@@ -58,9 +44,9 @@ if (isset($_GET['page']) && $_GET['page'] === 'delete_booking' && isset($_GET['i
             <li><a href="../YCGallery.php">Video</a></li>
           </ul>
         </li>
-  <li><a href="../YCBooking-index.php">Bookings</a></li>
+  <li><a href="YCGalleryadmin.php?page=bookings">Bookings</a></li>
   <li><a href="../YCEvents.php">Events</a></li>
-  <li><a href="../YCBlogs-index.php">Blogs</a></li>
+  <li><a href="YCGalleryadmin.php?page=blogs">Blogs</a></li>
    <li><a href="../YCMerch-merch1.php">Merchandise Store</a></li>
       </ul>
     </div>
@@ -73,12 +59,12 @@ if (isset($_GET['page']) && $_GET['page'] === 'delete_booking' && isset($_GET['i
 <!-- Left Sidebar -->
 <div class="left-sidebar">
     <ul class="nav-links">
-     <li><a href="../YCHome-admin.php">Home</a></li>
+  <li><a href="../YCHome-admin.php">Home</a></li>
      <li class="gallery-dropdown">
         <a href="#">Gallery ▼</a>
         <ul class="dropdown">
           <li><a href="YCGalleryadmin.php?page=music">Music</a></li>
-               <li><a href="YCGalleryadmin.php?page=video">Video</a></li>
+          <li><a href="YCGalleryadmin.php?page=video">Video</a></li>
         </ul>
       </li>
   <li><a href="YCBooking_admin.php?page=bookings">Bookings</a></li>
@@ -228,11 +214,8 @@ switch ($page) {
       if ($_GET['delete'] === 'success') {
         echo '<div class="delete-success-message" style="background:#7a5a27;color:#fff;padding:15px 18px;border-radius:6px;margin-bottom:18px;text-align:left;font-weight:500;font-size:1.08em;border:1px solid #7a5a27;">Booking deleted successfully!</div>';
         echo '<script>document.addEventListener("DOMContentLoaded",function(){const msg=document.querySelector(".delete-success-message");if(msg){setTimeout(()=>{msg.style.display="none";},1200);}});</script>';
-      } elseif ($_GET['delete'] === 'notfound') {
-        echo '<div style="background:#c0392b;color:#fff;padding:12px 18px;border-radius:8px;margin-bottom:18px;text-align:center;font-weight:500;font-size:1.08em;border:2px solid #b08d4a;">Booking not found or already deleted.</div>';
       } elseif ($_GET['delete'] === 'error') {
-        $msg = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : 'Error deleting booking. Please try again.';
-        echo '<div style="background:#c0392b;color:#fff;padding:12px 18px;border-radius:8px;margin-bottom:18px;text-align:center;font-weight:500;font-size:1.08em;border:2px solid #b08d4a;">'.$msg.'</div>';
+        echo '<div style="background:#c0392b;color:#fff;padding:12px 18px;border-radius:8px;margin-bottom:18px;text-align:center;font-weight:500;font-size:1.08em;border:2px solid #b08d4a;">Error deleting booking. Please try again.</div>';
       }
     }
     try {
@@ -257,12 +240,11 @@ switch ($page) {
         .'</tr></thead>';
         foreach ($bookings as $row) {
           echo '<tr>'
-          
-          .'<td style="padding:8px;border:1px solid #654922;">'.htmlspecialchars($row['first_name']).'</td>'
+            .'<td style="padding:8px;border:1px solid #654922;">'.htmlspecialchars($row['first_name']).'</td>'
             .'<td style="padding:8px;border:1px solid #654922;">'.htmlspecialchars($row['last_name']).'</td>'
             .'<td style="padding:8px;border:1px solid #654922;">'.htmlspecialchars($row['email']).'</td>'
             .'<td style="padding:8px;border:1px solid #654922;">'.htmlspecialchars($row['mobile_number']).'</td>'
-            .'<td style="padding:8px;border:1px solid #654922;white-space:nowrap;">'.htmlspecialchars($row['booking_date']).'</td>'
+            .'<td style="padding:8px;border:1px solid #654922;">'.htmlspecialchars($row['booking_date']).'</td>'
             .'<td style="padding:8px;border:1px solid #654922;">'.htmlspecialchars($row['booking_time']).'</td>'
             .'<td style="padding:8px;border:1px solid #654922;">'.htmlspecialchars($row['other_info']).'</td>'
             .'<td style="padding:8px;border:1px solid #654922;white-space:pre-line;">'.htmlspecialchars($row['admin_notes'] ?? '').'</td>'

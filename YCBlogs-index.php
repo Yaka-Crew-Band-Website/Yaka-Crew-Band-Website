@@ -1,4 +1,26 @@
 <?php include 'YCdb_connection.php'; ?>
+<?php
+session_start();
+require_once __DIR__ . '/YCdb_connection.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['message'])) {
+    $email = trim($_POST['email']);
+    $message = trim($_POST['message']);
+
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) && $message !== '') {
+        $stmt = $pdo->prepare("INSERT INTO messages (email, message) VALUES (?, ?)");
+        $stmt->execute([$email, $message]);
+        $_SESSION['contact_success'] = 'Thanks! Your message was sent.';
+    } else {
+        $_SESSION['contact_error'] = 'Please enter a valid email and a message.';
+    }
+
+    // Stay on the same page (POST/Redirect/GET)
+    header('Location: ' . strtok($_SERVER['REQUEST_URI'], '?'));
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,6 +179,124 @@ body {
 .dropdown li a:hover {
   color: white;
 }
+
+/* Add this for social icons */
+.social-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.social-links li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.social-icon {
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Optional: style the links */
+.social-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.social-links a:hover {
+  text-decoration: underline;
+  color: #ffd700; /* gold/yellow on hover, or pick your color */
+}
+/* Footer */
+footer {
+    background-color: #0a0a0a;
+    padding: 30px 40px;
+    text-align:center;
+    border-top: 2px solid #654922;
+    margin-top: 60px;
+    margin-bottom: 0;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+footer h3 {
+    color: #B68B4B;
+    margin-bottom: 20px;
+}
+
+footer form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+footer input,
+footer textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #654922;
+    border-radius: 4px;
+    background-color: #000000;
+    color: white;
+}
+
+footer button {
+    background-color: #654922;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+footer button:hover {
+    background-color: #956E2F;
+}
+
+/* Center the Contact Us heading in .footer-right */
+.footer-right h2 {
+  text-align: center;
+  margin-left: 0;
+}
+
+/* Contact Us Section Gradient */
+.footer-content {
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+    border-radius: 0;
+    padding: 40px 0 40px 0;
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.footer-left {
+  flex: 1 1 250px;
+  min-width: 220px;
+  text-align: left;
+}
+.footer-right {
+  flex: 1 1 350px;
+  min-width: 300px;
+  text-align: left;
+  margin-left: auto;
+}
+
+
 </style>
     <link rel="stylesheet" href="css/YCBlogs-style.css">
   
@@ -265,22 +405,73 @@ if (count($rows) > 0):
 //  slider.addEventListener("mouseenter", stop);
 //  slider.addEventListener("mouseleave", start);
 //});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const msg = document.getElementById("successMessage") || document.getElementById("errorMessage");
+  if (msg) {
+    setTimeout(() => {
+      msg.style.opacity = "0"; // fade out
+      setTimeout(() => msg.remove(), 800); // remove after fade
+    }, 2000); // wait 2 seconds
+  }
+});
+
+
 //</script>
 
 
+
 <footer>
-  <div class="footer-content">
-    <h2>Contact Us</h2>
-    <form action="#" method="post">
-      <input type="email" name="email" placeholder="Your Email" required>
-      <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
-      <button type="submit">Send</button>
-    </form>
+  <div class="footer-container">
+    
+    <!-- Left side: Social Media -->
+    <div class="footer-left">
+      <h2>Visit Us</h2>
+      <ul class="social-links">
+        <li>
+          <img src="assets/images/facebook.png" alt="Facebook" class="social-icon">
+          <a href="https://www.facebook.com/yakacrewonline" target="_blank">Facebook</a>
+        </li>
+        <li>
+          <img src="assets/images/instagram.png" alt="Instagram" class="social-icon">
+          <a href="https://www.instagram.com/yakacrew/" target="_blank">Instagram</a>
+        </li>
+        <li>
+          <img src="assets/images/youtube.png" alt="YouTube" class="social-icon">
+          <a href="https://www.youtube.com/@YakaCrew_Official" target="_blank">YouTube</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Right side: Contact Form -->
+    <div class="footer-right">
+      <h2>Contact Us</h2>
+    <?php if (!empty($_SESSION['contact_success'])): ?>
+  <div class="success-message" id="successMessage">
+      <?php echo $_SESSION['contact_success']; ?>
+  </div>
+  <?php unset($_SESSION['contact_success']); ?>
+<?php elseif (!empty($_SESSION['contact_error'])): ?>
+  <div class="error-message" id="errorMessage">
+      <?php echo $_SESSION['contact_error']; ?>
+  </div>
+  <?php unset($_SESSION['contact_error']); ?>
+<?php endif; ?>
+
+      <form action="" method="post" class="contact-form">
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+
   </div>
 </footer>
-
 </body>
 </html>
+
+
+
 
 
 

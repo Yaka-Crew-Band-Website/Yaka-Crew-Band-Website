@@ -107,14 +107,7 @@ body {
   box-shadow: #956E2F;
 }
 
-footer {
-  text-align: center;
-  margin-top: 60px;
-  padding-top: 20px;
-  border-top: 1px solid #333;
-  color: #666;
-  font-size: 14px;
-}
+
 
 .price {
   display: block;

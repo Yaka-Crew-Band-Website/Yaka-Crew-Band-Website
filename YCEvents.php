@@ -301,5 +301,7 @@ $all_events = $all_events_stmt->fetchAll(PDO::FETCH_ASSOC);
   
   <script src="js/YCEvents.js"></script>
   <!-- ... -->
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>

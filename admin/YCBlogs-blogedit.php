@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $full_description = $_POST['full_description'] ?? '';
     $image_name = $blog['image'];
 
-    $target_dir = __DIR__ . "/uploads/";
+    $target_dir = __DIR__ . "/../uploads/Blogs/";
     if (!is_dir($target_dir)) mkdir($target_dir, 0777, true);
     if (!empty($_FILES['image']['name']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
@@ -147,11 +147,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <textarea name="full_description" id="full_description" rows="6" required><?= htmlspecialchars($blog['full_description']) ?></textarea>
 
         <label>Current Image:</label>
-        <?php if (!empty($blog['image']) && file_exists(__DIR__ . "/uploads/" . $blog['image'])): ?>
-            <img src="uploads/<?= htmlspecialchars($blog['image']) ?>" alt="Blog Image">
-        <?php else: ?>
-            <div style="color: #aaa; margin-bottom: 10px;">No image available.</div>
-        <?php endif; ?>
+        <?php if (!empty($blog['image']) && file_exists(__DIR__ . "/../uploads/Blogs/" . $blog['image'])) {
+    echo '<img src="../uploads/Blogs/' . htmlspecialchars($blog['image']) . '" alt="Blog Image">';
+} else {
+    echo '<div style="color: #aaa; margin-bottom: 10px;">No image available.</div>';
+}
+?>
 
         <label for="image">Change Image:</label>
         <input type="file" name="image" id="image" accept="image/*">

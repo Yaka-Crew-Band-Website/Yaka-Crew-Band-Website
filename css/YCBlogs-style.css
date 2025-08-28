@@ -1,12 +1,4 @@
-/* Contact Us Section Gradient */
-.footer-content {
-    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
-    border-radius: 0;
-    padding: 40px 0 40px 0;
-    width: 100%;
-    margin: 0;
-    box-shadow: none;
-}
+
 /* Global Styles */
 html, body {
     height: 100%;
@@ -17,7 +9,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    font-family: Georgia, serif;
+    font-family: Arial, sans-serif;
     background-color: #000000;
     color: #f5f5f5;
     text-align: center;
@@ -153,51 +145,7 @@ header {
     background-color: #956E2F;
 }
 
-/* Footer */
-footer {
-    background-color: #0a0a0a;
-    padding: 30px 40px;
-    text-align: center;
-    border-top: 2px solid #654922;
-    margin-top: 60px;
-    margin-bottom: 0;
-    width: 100%;
-    flex-shrink: 0;
-}
 
-footer h3 {
-    color: #B68B4B;
-    margin-bottom: 20px;
-}
-
-footer form {
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-footer input,
-footer textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #654922;
-    border-radius: 4px;
-    background-color: #000000;
-    color: white;
-}
-
-footer button {
-    background-color: #654922;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-footer button:hover {
-    background-color: #956E2F;
-}
 
 /* Post Page */
 .post-container {

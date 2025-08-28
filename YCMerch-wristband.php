@@ -7,6 +7,7 @@ $bands = $stmt->fetchAll();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     * {
       margin: 0;
@@ -22,6 +23,48 @@ $bands = $stmt->fetchAll();
       flex-direction: column;
       padding-top: 80px; /* Ensure nav bar doesn't overlap */
       overflow-x: hidden;
+    }
+    /* Ensure the footer is at the bottom */
+    html, body {
+      height: 100%;
+    }
+    .main, main, .container, .content, .merch-container, .blog-container, .gallery-container, .grid {
+      flex: 1 0 auto;
+    }
+    footer {
+      flex-shrink: 0;
+      width: 100%;
+      margin-top: auto;
+    }
+    /* Remove .grid min-height to avoid stretching cards */
+    .grid {
+      min-height: unset;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .card {
+      height: 370px;
+      max-height: 370px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+    .thumb {
+      height: 180px;
+      max-height: 180px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb img {
+      max-height: 100%;
+      width: auto;
+      object-fit: contain;
     }
      /* Navbar */
 .navbar {
@@ -156,22 +199,41 @@ $bands = $stmt->fetchAll();
     <!-- Top Navigation Bar -->
   <div class="navbar">
     <div class="logo">
+<a href="YCMerch-merch1.php">
       <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo">
-    </div>
+      </a>    </div>
     <ul class="nav-links">
-  <li><a href="YCHome.php">Home</a></li>
-    <li class="gallery-dropdown">
-  Gallery <span class="arrow">&#9662;</span>
-  <ul class="dropdown">
-    <li><a href="YCPosts.php">Music</a></li>      
-    <li><a href="YCGallery.php">Video</a></li>     
-  </ul>
-</li>
-      <li>Blogs</li>
-  <li><a href="YCBooking-index.php">Bookings</a></li>
+      <li><a href="YCHome.php">Home</a></li>
+      <li class="gallery-dropdown">
+        Gallery <span class="arrow">&#9662;</span>
+        <ul class="dropdown">
+          <li><a href="YCPosts.php">Music</a></li>
+          <li><a href="YCGallery.php">Video</a></li>
+        </ul>
+      </li>
+         <li><a href="YCBlogs-index.php">Blogs</a></li>
+      <li><a href="YCBooking-index.php">Bookings</a></li>
       <li><a href="YCEvents.php">Events</a></li>
-        <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
-      </ul>
+      <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+      <li>
+        <a href="YCMerch-cartproducts.php" class="cart-icon" style="position:relative; font-size:1.2rem;">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="merch-cart-count" style="position:absolute; top:-8px; right:-8px; background-color:#956E2F; color:white; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:bold;">0</span>
+        </a>
+      </li>
+    </ul>
+</style>
+<script>
+// Update cart count from sessionStorage or fallback to PHP session if needed
+function updateMerchCartCount() {
+  let count = 0;
+  if (sessionStorage.getItem('merchCartCount')) {
+    count = parseInt(sessionStorage.getItem('merchCartCount'));
+  }
+  document.getElementById('merch-cart-count').textContent = count;
+}
+document.addEventListener('DOMContentLoaded', updateMerchCartCount);
+</script>
     </div>
 
     </header>
@@ -198,5 +260,7 @@ $bands = $stmt->fetchAll();
   <?php endforeach; ?>
     </section>
   </div>
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>

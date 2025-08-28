@@ -56,7 +56,7 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
     <div class="cart-actions">
       <a href="YCEvents.php"><button class="btn btn-outline">Back to Events</button></a>
-      <button class="btn btn-primary">Proceed to Checkout</button>
+      <button class="btn btn-primary" id="checkout-btn" disabled>Proceed to Checkout</button>
     </div>
   </main>
 
@@ -77,6 +77,7 @@ if (session_status() === PHP_SESSION_NONE) {
     document.addEventListener('DOMContentLoaded', function() {
         const cartItemsContainer = document.getElementById('cart-items-container');
         const cartTotalElement = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
 
         async function fetchCartItemsDetails(cartItems) {
             try {
@@ -117,54 +118,69 @@ if (session_status() === PHP_SESSION_NONE) {
 
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = '<p class="empty-cart-message">Your cart is empty. Add some tickets!</p>';
+                checkoutBtn.disabled = true;
             } else {
+                checkoutBtn.disabled = false;
                 // Fetch the latest details for all items in cart
-        const detailsMap = await fetchCartItemsDetails(cart);
+                const detailsMap = await fetchCartItemsDetails(cart);
 
                 const PLACEHOLDER_IMG = 'assets/images/image6.JPG';
                 
-        cart.forEach(item => {
-          const eventDetails = detailsMap[item.id] || item;
+                const cartForCheckout = [];
+
+                cart.forEach(item => {
+                    const eventDetails = detailsMap[item.id] || item;
                     const rawImg = eventDetails.image || '';
                     const isString = typeof rawImg === 'string' && rawImg.length > 0;
                     let resolved = PLACEHOLDER_IMG;
                     if (isString) {
-                      if (rawImg.includes('/')) {
-                        resolved = rawImg;
-                      } else if (rawImg.includes('.')) {
-                        const filename = rawImg.split('/').pop();
-                        resolved = `uploads/Events/${filename}`;
-                      }
+                        if (rawImg.includes('/')) {
+                            resolved = rawImg;
+                        } else if (rawImg.includes('.')) {
+                            const filename = rawImg.split('/').pop();
+                            resolved = `uploads/Events/${filename}`;
+                        }
                     }
                     const imgSrc = encodeURI(resolved);
 
-          const name = eventDetails.name || 'Event';
-          const date = eventDetails.date || '';
-          const location = eventDetails.location || '';
-          const priceNum = Number(eventDetails.price) || 0;
+                    const name = eventDetails.name || 'Event';
+                    const date = eventDetails.date || '';
+                    const location = eventDetails.location || '';
+                    const priceNum = Number(eventDetails.price) || 0;
 
-          const itemElement = document.createElement('div');
-          itemElement.className = 'cart-item';
-          itemElement.innerHTML = `
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cart-item';
+                    itemElement.innerHTML = `
                         <div class="item-image">
-              <img src="${imgSrc}" alt="${name}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
+                            <img src="${imgSrc}" alt="${name}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
                         </div>
                         <div class="item-details">
-              <h3>${name}</h3>
-              <p>${date} - ${location}</p>
-              <p>Price: LKR ${priceNum.toFixed(2)}</p>
+                            <h3>${name}</h3>
+                            <p>${date} - ${location}</p>
+                            <p>Price: LKR ${priceNum.toFixed(2)}</p>
                         </div>
                         <div class="item-quantity">
                             <button data-id="${item.id}" data-action="decrease">-</button>
                             <input type="number" value="${item.quantity}" min="1" data-id="${item.id}" class="quantity-input">
                             <button data-id="${item.id}" data-action="increase">+</button>
                         </div>
-            <div class="item-price">LKR ${(priceNum * item.quantity).toFixed(2)}</div>
+                        <div class="item-price">LKR ${(priceNum * item.quantity).toFixed(2)}</div>
                         <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash"></i></button>
                     `;
                     cartItemsContainer.appendChild(itemElement);
-          total += priceNum * item.quantity;
+                    total += priceNum * item.quantity;
+
+                    cartForCheckout.push({
+                        ...item,
+                        image: imgSrc,
+                        name: name,
+                        date: date,
+                        location: location,
+                        price: priceNum
+                    });
                 });
+
+                sessionStorage.setItem('checkoutCart', JSON.stringify(cartForCheckout));
             }
             cartTotalElement.textContent = `LKR ${total.toFixed(2)}`;
             attachCartListeners();
@@ -212,10 +228,24 @@ if (session_status() === PHP_SESSION_NONE) {
             document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
         }
 
+        // Handle checkout button click
+        checkoutBtn.addEventListener('click', function() {
+            const cart = JSON.parse(localStorage.getItem('yakaCrewCart')) || [];
+            if (cart.length === 0) {
+                showToast('Your cart is empty. Add tickets before checkout.', true);
+                return;
+            }
+            
+            // Redirect to payment page
+            window.location.href = 'YCEvents-payment.php';
+        });
+
         // Initial render
         renderCart();
         updateCartCount();
     });
   </script>
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>

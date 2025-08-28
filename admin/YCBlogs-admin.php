@@ -241,6 +241,35 @@ if (isset($_SESSION['error'])) {
         </table>
   
     </div>
+    <div class="upload-container">
+  <h2>Contact Messages</h2>
+  <table class="blog-table" width="800">
+    <tr class="blog-table-header">
+      <th>ID</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+    <?php
+    $stmt = $pdo->query("SELECT * FROM messages ORDER BY created_at DESC");
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($rows) > 0):
+        foreach ($rows as $row): ?>
+        <tr align="Center">
+          <td><?= htmlspecialchars($row['id']) ?></td>
+          <td><?= htmlspecialchars($row['email']) ?></td>
+          <td>
+            <form method="GET" action="YCBlogs-messageread.php" style="display:inline;">
+              <input type="hidden" name="id" value="<?= $row['id'] ?>">
+              <button type="submit" class="admin-edit-btn">Read Message</button>
+            </form>
+          </td>
+        </tr>
+    <?php endforeach; else: ?>
+        <tr><td colspan="3">No messages found.</td></tr>
+    <?php endif; ?>
+  </table>
+</div>
+
 <?php
     break;
 

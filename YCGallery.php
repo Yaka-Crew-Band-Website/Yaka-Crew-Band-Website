@@ -76,25 +76,44 @@ try {
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
-  <!-- Top Navigation Bar -->
-  <div class="navbar">
+  <!-- Responsive Navigation Bar -->
+  <nav class="navbar">
     <div class="logo">
       <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo">
     </div>
-    <ul class="nav-links">
+  
+    <ul class="nav-links" id="navLinks">
       <li><a href="YCHome.php">Home</a></li>
       <li class="gallery-dropdown">
         Gallery <span class="arrow">&#9662;</span>
         <ul class="dropdown">
-          <li><a href="YCPosts.php">Music</a></li>      <!-- ✅ Correct PHP file -->
-          <li><a href="YCGallery.php">Video</a></li>     <!-- ✅ Correct PHP file -->
+          <li><a href="YCPosts.php">Music</a></li>
+          <li><a href="YCGallery.php">Video</a></li>
         </ul>
       </li>
       <li><a href="YCBlogs-index.php">Blogs</a></li>
       <li><a href="YCBooking-index.php">Bookings</a></li>
       <li><a href="YCEvents.php">Events</a></li>
       <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
-  </div>
+    </ul>
+      <button class="menu-btn" id="menuBtn" aria-label="Open navigation menu">
+      <span class="menu-icon"></span>
+    </button>
+   
+  </nav>
+  <script>
+    // Responsive menu toggle (safe: checks elements exist)
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuBtn = document.getElementById('menuBtn');
+      const navLinks = document.getElementById('navLinks');
+      if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', function() {
+          navLinks.classList.toggle('nav-open');
+          menuBtn.classList.toggle('open');
+        });
+      }
+    });
+  </script>
 
   <!-- Cover Wallpaper -->
 <div class="cover">
@@ -1164,12 +1183,14 @@ document.addEventListener('DOMContentLoaded', function() {
     videoCloseBtn.addEventListener('click', function() {
       videoPlayerModal.classList.remove('show');
             if (videoPlayer) {
-        videoPlayer.pause();
-        videoPlayer.currentTime = 0;
-        videoSource.src = '';
-        if (videoSourceWebm) videoSourceWebm.src = '';
-        if (videoSourceOgg) videoSourceOgg.src = '';
-        videoPlayer.load();
+    if (document.pictureInPictureElement !== videoPlayer) {
+      videoPlayer.pause();
+      videoPlayer.currentTime = 0;
+      videoSource.src = '';
+      if (videoSourceWebm) videoSourceWebm.src = '';
+      if (videoSourceOgg) videoSourceOgg.src = '';
+      videoPlayer.load();
+    }
       }
             if (ytPlayer && ytApiReady) { try { ytPlayer.stopVideo(); } catch(_){} }
       if (youtubeContainer) youtubeContainer.style.display = 'none';
@@ -1301,6 +1322,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
   </script>
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>
 
