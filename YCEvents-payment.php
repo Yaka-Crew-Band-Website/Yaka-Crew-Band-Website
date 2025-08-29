@@ -1,7 +1,7 @@
 <?php
 
 // Use Composer's vendor autoload for Stripe
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/YCEvent-vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
