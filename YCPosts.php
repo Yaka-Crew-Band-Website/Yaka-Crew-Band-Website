@@ -163,8 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     btn.addEventListener('click', function() {
       if (btn.disabled) return;
-      // AJAX to like_post.php
-      fetch('like_post.php', {
+  // AJAX to YCPosts-like.php
+  fetch('YCPosts-like.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'post_id=' + encodeURIComponent(postId)
