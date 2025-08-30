@@ -119,12 +119,13 @@ if ($page === 'blogs') {
     <ul class="view-dropdown-menu">
   <li><a href="../YCHome.php">Home</a></li>
         <li class="gallery-submenu">
-          <a href="YCGalleryadmin.php?page=gallery">Gallery ▶</a>
+       <a id="galleryViewDropdownLink" role="button" tabindex="0" style="cursor:pointer;">Gallery ▶</a>
           <ul class="gallery-submenu-items">
             <li><a href="../YCPosts.php">Music</a></li>
             <li><a href="../YCGallery.php">Video</a></li>
           </ul>
         </li>
+  
   <li><a href="../YCBooking-index.php">Bookings</a></li>
   <li><a href="../YCEvents.php">Events</a></li>
   <li><a href="../YCBlogs-index.php">Blogs</a></li>
