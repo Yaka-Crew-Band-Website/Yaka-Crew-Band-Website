@@ -38,15 +38,16 @@ if (isset($_GET['page']) && $_GET['page'] === 'delete_booking' && isset($_GET['i
     <ul class="view-dropdown-menu">
   <li><a href="../YCHome.php">Home</a></li>
         <li class="gallery-submenu">
-          <a href="YCGalleryadmin.php?page=gallery">Gallery ▶</a>
+        <a id="galleryViewDropdownLink" role="button" tabindex="0" style="cursor:pointer;">Gallery ▶</a>
           <ul class="gallery-submenu-items">
             <li><a href="../YCPosts.php">Music</a></li>
             <li><a href="../YCGallery.php">Video</a></li>
           </ul>
         </li>
-  <li><a href="YCGalleryadmin.php?page=bookings">Bookings</a></li>
+        
+  <li><a href="../YCBooking-index.php">Bookings</a></li>
   <li><a href="../YCEvents.php">Events</a></li>
-  <li><a href="YCGalleryadmin.php?page=blogs">Blogs</a></li>
+  <li><a href="../YCBlogs-index.php">Blogs</a></li>
    <li><a href="../YCMerch-merch1.php">Merchandise Store</a></li>
       </ul>
     </div>

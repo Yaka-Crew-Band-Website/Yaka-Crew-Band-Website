@@ -44,18 +44,23 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     <ul class="view-dropdown-menu">
   <li><a href="../YCHome.php">Home</a></li>
         <li class="gallery-submenu">
-          <a href="YCGalleryadmin.php?page=gallery">Gallery ▶</a>
+      <a id="galleryViewDropdownLink" role="button" tabindex="0" style="cursor:pointer;">Gallery ▶</a>
           <ul class="gallery-submenu-items">
             <li><a href="../YCPosts.php">Music</a></li>
             <li><a href="../YCGallery.php">Video</a></li>
           </ul>
         </li>
+
   <li><a href="../YCBooking-index.php">Bookings</a></li>
   <li><a href="../YCEvents.php">Events</a></li>
   <li><a href="../YCBlogs-index.php">Blogs</a></li>
    <li><a href="../YCMerch-merch1.php">Merchandise Store</a></li>
       </ul>
     </div>
+    <form method="post" action="admin_report.php" style="display:inline; margin-left:20px;">
+      <input type="hidden" name="page" value="<?php echo htmlspecialchars($page); ?>">
+      <button type="submit" style="padding:7px 14px; background:#654922; color:#fff; border:none; border-radius:4px; font-size:15px; cursor:pointer;">Generate PDF Report</button>
+    </form>
     <a href="../YClogin.php?action=logout" class="logout-btn">Logout</a>
   </div>
 </div>
@@ -86,9 +91,12 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 <?php
 switch ($page) {
   case 'home':
-    echo "<h2>Dashboard</h2>";
-    echo "<p>Welcome to the Yaka Crew Admin Panel. Use the navigation to manage different sections of your website.</p>";
-    break;
+  echo "<h2>Dashboard</h2>";
+  echo "<p>Welcome to the Yaka Crew Admin Panel. Use the navigation to manage different sections of your website.</p>";
+  echo '<form method="post" action="dashboard_report.php" style="margin-top:20px;">';
+  echo '<button type="submit" style="padding:10px 18px; background:#654922; color:#fff; border:none; border-radius:4px; font-size:16px; cursor:pointer;">Generate PDF Report</button>';
+  echo '</form>';
+  break;
 
   case 'music':
     echo "<h2>Music Management</h2>";
