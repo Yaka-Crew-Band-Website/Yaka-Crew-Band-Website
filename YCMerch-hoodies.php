@@ -25,6 +25,28 @@ $hoodies = $stmt->fetchAll();
       padding-top: 80px; /* Ensure nav bar doesn't overlap */
       overflow-x: hidden;
     }
+
+      /* Ensure the footer is at the bottom */
+    html, body {
+      height: 100%;
+    }
+    .main, main, .container, .content, .merch-container, .blog-container, .gallery-container, .grid {
+      flex: 1 0 auto;
+    }
+    footer {
+      flex-shrink: 0;
+      width: 100%;
+      margin-top: auto;
+    }
+    /* Remove .grid min-height to avoid stretching cards */
+    .grid {
+      min-height: unset;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      align-items: flex-start;
+    }
          /* Navbar */
 .navbar {
   display: flex;
@@ -221,5 +243,7 @@ document.addEventListener('DOMContentLoaded', updateMerchCartCount);
     </section>
 
   </div>
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>

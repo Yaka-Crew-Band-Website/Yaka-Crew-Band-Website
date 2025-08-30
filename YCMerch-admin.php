@@ -43,9 +43,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
             <li><a href="YCGallery.php">Video</a></li>
           </ul>
         </li>
-  <li><a href="YCBooking-index.php">Bookings</a></li>
+  <li><a href="YCGalleryadmin.php?page=bookings">Bookings</a></li>
   <li><a href="YCEvents.php">Events</a></li>
-  <li><a href="../YCBlogs-index.php>Blogs</a></li>
+  <li><a href="YCGalleryadmin.php?page=blogs">Blogs</a></li>
    <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
       </ul>
     </div>
@@ -66,9 +66,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
           <li><a href="admin/YCGalleryadmin.php?page=video">Video</a></li>
         </ul>
       </li>
-  <li><a href="admin/YCBooking_admin.php?page=bookings">Bookings</a></li>
+      <li><a href="YCEvents-admin.php?page=bookings">Bookings</a></li>
       <li><a href="YCEvents-admin.php?page=events">Events</a></li>
-      <li><a href="admin/YCBlogs-admin.php?page=blogs">Blogs</a></li>
+      <li><a href="YCEvents-admin.php?page=blogs">Blogs</a></li>
       <li><a href="YCMerch-admin.php?page=merchandise-store">Merchandise Store</a></li>
     </ul>
   </div>

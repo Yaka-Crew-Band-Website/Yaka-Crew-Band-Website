@@ -229,12 +229,12 @@ input:focus {
 }
 
 .event-date::before {
-    content: "📅";
+    content: "\1F4C5"; /* 📅 calendar emoji */
     margin-right: 8px;
 }
 
 .event-location::before {
-    content: "📍";
+    content: "\1F4CD"; /* 📍 location pin emoji */
     margin-right: 8px;
 }
 

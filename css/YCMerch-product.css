@@ -1,9 +1,3 @@
-.logo-img {
-  height: 70px;
-  border: 1px solid white;
-  padding: 5px;
-  border-radius: 4px;
-}
 
 .color-swatch {
   width: 30px;
@@ -31,19 +25,6 @@ body {
   min-height: 100vh;
 }
 
-.logo-img {
-  width: 120px;    
-  height: auto;     
-}
-
-.logo-img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover; 
-  border-radius: 10px; 
-}
-
-
 
 header {
   display: flex;
@@ -54,28 +35,6 @@ header {
   flex-wrap: wrap;
 }
 
-.logo {
-  border: 1px solid red;
-  padding: 1em;
-  font-weight: bold;
-}
-
-nav {
-  display: flex;
-  gap: 1.5em;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-nav a {
-  text-decoration: none;
-  color: white;
-  border-bottom: 1px solid transparent;
-}
-
-nav a:hover {
-  border-bottom: 1px solid white;
-}
 
 
 
@@ -87,12 +46,11 @@ body {
   color: white;
   padding-top: 80px; /* Add space for fixed navbar */
 }
-
 /* Navbar */
 .navbar {
   display: flex;
   align-items: center;
-  background-color: #202221;
+  background-color: black;
   padding: 10px 20px;
   position: fixed;
   top: 0;
@@ -129,6 +87,25 @@ body {
 .nav-links > li.active {
   border-bottom: 2px solid white;
 }
+
+/* Single underline fix: keep underline on <li>, never on <a> (prevents double lines) */
+.nav-links > li > a,
+.nav-links > li > a:link,
+.nav-links > li > a:visited,
+.nav-links > li > a:hover,
+.nav-links > li > a:focus,
+.nav-links > li > a.active {
+  color: #fff !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+/* Keep underline only from these rules */
+.nav-links > li:hover,
+.nav-links > li.active {
+  border-bottom: 2px solid #fff;
+}
+
 
 /* Dropdown */
 .gallery-dropdown {

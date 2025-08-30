@@ -159,6 +159,13 @@ switch ($page) {
           foreach ($posts as $post) {
             echo '<div style="border: 1px solid #654922; padding: 12px; border-radius: 8px; background: #000000; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">';
             echo '<h4 style="margin: 0 0 8px 0; color: white; font-size: 16px; line-height: 1.2;">' . htmlspecialchars($post['title']) . '</h4>';
+            // Show like count if available
+            if (isset($post["likes"])) {
+              echo '<div style="color: white; font-size: 15px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; justify-content: flex-start;">';
+              echo '<i class="fa fa-heart" style="color:white;"></i> ';
+              echo '<span style="font-weight:600; color:white;">' . (int)$post["likes"] . '</span> Likes';
+              echo '</div>';
+            }
             $cover = $post['image_path'] ?? '';
             if ($cover) {
               // Check for post image in source/Gallery/YCposts first, then uploads/Gallery/YCposts

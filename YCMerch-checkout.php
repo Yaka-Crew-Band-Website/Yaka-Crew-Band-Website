@@ -314,8 +314,8 @@ if (!empty($cart)) {
   </div>
 
   <script>
-    // ---------- Stripe Elements (split) ----------
-    const stripe = Stripe('pk_test_51Rz9cXAlz3HCjY3AhQpzZw6R1ClKN70jhIKqDhXLcNwzV6SqiQZ8Uf04zWl6DzUigacmJOZCLyjIUTm6p2aVQi1t00zJEks9Bn'); // <-- TODO: replace
+    // ---------- Stripe Elements (split, like events page) ----------
+    const stripe = Stripe('pk_test_51Rz9cXAlz3HCjY3AhQpzZw6R1ClKN70jhIKqDhXLcNwzV6SqiQZ8Uf04zWl6DzUigacmJOZCLyjIUTm6p2aVQi1t00zJEks9Bn');
     const elements = stripe.elements();
     const style = { base: { fontSize: '16px', color: '#fff', '::placeholder': { color: '#999' } } };
     const cardNumber = elements.create('cardNumber', { style, showIcon: true });
@@ -338,79 +338,69 @@ if (!empty($cart)) {
       st.textContent = msg || '';
     }
 
-    // ---------- Submit handler ----------
+    // ---------- Submit handler (like events page) ----------
     document.getElementById('payment-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       setBusy(true, 'Creating payment…');
 
-      // Gather shipping/billing (light)
       const name = (document.getElementById('cardholder-name').value || '').trim();
-      const address = {
-        line1: (document.getElementById('addr-line1').value || '').trim(),
-        city: (document.getElementById('city').value || '').trim(),
-        postal_code: (document.getElementById('postal').value || '').trim(),
-        country: (document.getElementById('country').value || 'LK')
-      };
-
-      // Get subtotal (LKR) from container data-attr
+      const email = (document.getElementById('contact').value || '').trim();
       const container = document.querySelector('.checkout-container');
       const subtotalLkrStr = container.getAttribute('data-subtotal-lkr') || '0';
       const subtotalLkr = parseFloat(subtotalLkrStr) || 0;
+      const amountCents = Math.round((subtotalLkr / 300) * 100); // Convert LKR to USD cents (test mode)
 
       try {
-        // 1) Ask backend to create a PaymentIntent (TEST: USD)
-  const res = await fetch('YCMerch-createpayment.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            subtotal_lkr: subtotalLkr,
-            shipping: address,
-            name
-          })
+        // 1) Create payment method
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardNumber,
+          billing_details: { name, email },
         });
-        const data = await res.json();
-        if (!data.clientSecret) throw new Error(data.error || 'No client secret from server');
-
-        setBusy(true, 'Confirming with Stripe…');
-
-        // 2) Confirm card payment with split element
-        const result = await stripe.confirmCardPayment(data.clientSecret, {
-          payment_method: {
-            card: cardNumber,
-            billing_details: { name, address }
-          }
-        });
-
-        if (result.error) {
-          errorEl.textContent = result.error.message || 'Payment failed.';
+        if (error) {
+          errorEl.textContent = error.message;
           setBusy(false);
           return;
         }
 
-        if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+        // 2) Send payment method to backend
+        const res = await fetch('YCMerch-createpayment.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            payment_method_id: paymentMethod.id,
+            amount: amountCents,
+            currency: 'usd',
+            email
+          })
+        });
+        const data = await res.json();
+        if (!data.client_secret) throw new Error(data.error || 'No client secret from server');
+
+        setBusy(true, 'Confirming with Stripe…');
+
+        // 3) Confirm card payment
+        const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(data.client_secret);
+        if (confirmError) {
+          errorEl.textContent = confirmError.message;
+          setBusy(false);
+          return;
+        }
+
+        if (paymentIntent && paymentIntent.status === 'succeeded') {
           setBusy(false, 'Payment succeeded! Redirecting…');
           alert('Thank you for your purchase! Your payment was successful.');
           sessionStorage.setItem('merchCartCount', '0');
-          // Update all cart icons to 0
-          document.querySelectorAll('.cart-count').forEach(function(el) {
-            el.textContent = '0';
-          });
+          document.querySelectorAll('.cart-count').forEach(function(el) { el.textContent = '0'; });
           fetch('YCMerch-cartproducts.php?clear=1', {method: 'GET'});
-          setTimeout(function() {
-            window.location.href = 'YCMerch-merch1.php';
-          }, 3000);
+          setTimeout(function() { window.location.href = 'YCMerch-merch1.php'; }, 3000);
         } else {
-          setBusy(false, 'Payment status: ' + (result.paymentIntent?.status || 'unknown'));
+          setBusy(false, 'Payment status: ' + (paymentIntent?.status || 'unknown'));
         }
-
       } catch (err) {
         errorEl.textContent = err.message || 'Unexpected error';
         setBusy(false);
       }
     });
   </script>
-</body>
-</html>
-  </script>
-</body>
-</html>
+

@@ -245,5 +245,7 @@ if (session_status() === PHP_SESSION_NONE) {
         updateCartCount();
     });
   </script>
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>

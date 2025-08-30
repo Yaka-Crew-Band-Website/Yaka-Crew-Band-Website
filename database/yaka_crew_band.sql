@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 23, 2025 at 11:37 AM
+-- Generation Time: Aug 28, 2025 at 02:22 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -40,7 +40,7 @@ CREATE TABLE `albums` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `is_featured` tinyint(1) DEFAULT 0,
   `is_active` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -56,7 +56,7 @@ CREATE TABLE `band_members` (
   `image_path` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `band_members`
@@ -93,7 +93,7 @@ CREATE TABLE `events` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `additional_info` text DEFAULT NULL,
   `is_whats_new` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `events`
@@ -101,7 +101,7 @@ CREATE TABLE `events` (
 
 INSERT INTO `events` (`id`, `title`, `description`, `event_date`, `start_time`, `end_time`, `location`, `price`, `event_type`, `is_past_event`, `created_at`, `updated_at`, `additional_info`, `is_whats_new`) VALUES
 (5, 'Kande Sajje', 'Experience an unforgettable night of music, passion, and pure entertainment!\r\nThis live concert brings together a star-studded lineup of your favorite performers, ready to set the stage on fire with powerful vocals, energetic beats, and captivating performances.\r\n\r\nFrom soulful melodies to electrifying hits, every moment is designed to keep you singing, dancing, and living the rhythm. This isn’t just a concert—it’s a celebration of music, unity, and unforgettable vibes.\r\n\r\n✨ Don’t miss your chance to be part of this one-of-a-kind musical journey. Secure your tickets today and get ready for an evening you’ll remember forever!', '2025-09-13', '18:00:00', '00:00:00', 'Kandy', 3000.00, 'concert', 0, '2025-08-23 04:27:13', '2025-08-23 04:27:13', NULL, 1),
-(6, 'Mathakayan', 'Get ready for a night where legends, rising stars, and powerhouse performers share one stage! ? This live concert promises an extraordinary blend of timeless classics, high-energy hits, and unforgettable collaborations that will light up the night with pure musical magic. ??\r\n\r\nFrom dynamic bands to sensational solo acts, the lineup is stacked with the biggest names and fresh talents who will keep the crowd on their feet from start to finish. Expect dazzling performances, explosive energy, and a musical journey like no other.\r\n\r\n✨ Don’t miss your chance to witness this unforgettable celebration of music, rhythm, and entertainment. Secure your tickets now and be part of an experience that will be remembered long after the final note.', '2025-09-20', '18:30:00', '23:30:00', 'Lotus Tower Colombo', 2000.00, 'concert', 0, '2025-08-23 04:44:23', '2025-08-23 04:45:02', NULL, 1);
+(8, 'Mathakayan', 'Get ready for a night where legends, rising stars, and powerhouse performers share one stage! 🌟 This live concert promises an extraordinary blend of timeless classics, high-energy hits, and unforgettable collaborations that will light up the night with pure musical magic. 🎤🔥\r\n\r\nFrom dynamic bands to sensational solo acts, the lineup is stacked with the biggest names and fresh talents who will keep the crowd on their feet from start to finish. Expect dazzling performances, explosive energy, and a musical journey like no other.\r\n\r\n✨ Don’t miss your chance to witness this unforgettable celebration of music, rhythm, and entertainment. Secure your tickets now and be part of an experience that will be remembered long after the final note.', '2025-09-20', '18:00:00', '23:00:00', 'Lotus Tower Colombo', 2000.00, 'concert', 0, '2025-08-24 02:47:54', '2025-08-24 02:47:54', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -114,7 +114,7 @@ CREATE TABLE `event_images` (
   `event_id` int(11) NOT NULL,
   `image_path` varchar(255) NOT NULL,
   `is_primary` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `event_images`
@@ -126,7 +126,9 @@ INSERT INTO `event_images` (`id`, `event_id`, `image_path`, `is_primary`) VALUES
 (3, 3, 'event_689e2568944a82.13055791.jpeg', 1),
 (4, 4, 'event_68a93f57b1c2a9.51076446.jpeg', 1),
 (9, 5, 'event_68a945b70159e9.33428504.jpg', 1),
-(10, 6, 'event_68a94727d02c51.80630674.jpg', 1);
+(10, 6, 'event_68a94727d02c51.80630674.jpg', 1),
+(11, 7, 'event_68aa7a2a1255f7.22272471.jpg', 1),
+(12, 8, 'event_68aa7d5acf5137.99507970.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -144,27 +146,28 @@ CREATE TABLE `posts` (
   `image_path` varchar(500) DEFAULT NULL,
   `category` varchar(50) DEFAULT 'event',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `is_published` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `is_published` tinyint(1) DEFAULT 1,
+  `likes` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id`, `title`, `content`, `event_date`, `event_time`, `location`, `image_path`, `category`, `created_at`, `is_published`) VALUES
-(36, 'Coke Kottu Beat Party', '', '2024-05-14', NULL, 'Ambalangoda', 'uploads/Gallery/YCposts/post_68a8b8cc5e50b4.43223844.jpeg', 'event', '2025-08-22 15:10:57', 1),
-(37, 'Wannama', '', '2025-06-20', NULL, 'Katunayake', 'uploads/Gallery/YCposts/post_68a8b8c3235892.33741434.jpg', 'event', '2025-08-22 15:14:42', 1),
-(39, 'Wannama', '', '2025-06-20', NULL, 'Katunayake', 'uploads/Gallery/YCposts/post_68a8b8bbb29d32.21500598.jpg', 'event', '2025-08-22 15:18:28', 1),
-(40, 'Wannama', '', '2025-06-20', NULL, 'Katunayake', 'uploads/Gallery/YCposts/post_68a8b83e3374e2.71852623.jpg', 'event', '2025-08-22 15:19:59', 1),
-(41, 'Coke Kottu Beat Party', '', '2024-05-24', NULL, 'Ambalangoda', 'uploads/Gallery/YCposts/post_68a8b83589ada1.11506246.jpg', 'event', '2025-08-22 15:31:30', 1),
-(42, 'Battle of Maroons', '', '2025-03-04', NULL, 'Colombo', 'uploads/Gallery/YCposts/post_68a8b82d2832d6.17637525.jpg', 'concert', '2025-08-22 15:32:28', 1),
-(43, 'Battle of Maroons', '', '2025-03-04', NULL, 'Colombo', 'uploads/Gallery/YCposts/post_68a8b823802015.41102562.jpg', 'event', '2025-08-22 15:34:21', 1),
-(44, 'Battle of Maroons', '', '2025-03-04', NULL, 'Colombo', 'uploads/Gallery/YCposts/post_68a8b81b6fa6c1.44814964.jpg', 'event', '2025-08-22 15:34:57', 1),
-(45, 'ODYSSEY MMXXV', '', '2025-03-07', NULL, 'SLIIT Malabe', 'uploads/Gallery/YCposts/post_68a8b80dcc59d0.31894808.jpeg', 'concert', '2025-08-22 17:24:03', 1),
-(46, 'Ravana', '', '2024-11-25', NULL, 'Nelum Pokuna Mahinda Rajapaksa Theatre', 'uploads/Gallery/YCposts/post_68a8b801d1a4d4.75961863.jpg', 'concert', '2025-08-22 17:25:11', 1),
-(47, 'InterFlash', '', '2023-12-29', NULL, 'Nelum Kuluna Colombo', 'uploads/Gallery/YCposts/post_68a8b7f27a61c6.99927124.jpeg', 'concert', '2025-08-22 17:27:29', 1),
-(48, 'Yaka', '', '2024-08-08', NULL, 'Colombo', 'uploads/Gallery/YCposts/post_68a8b7df8b5551.51396178.jpeg', 'event', '2025-08-22 17:31:28', 1),
-(49, ' Padavi Sri Pura Yaka Live in Concert', '', '2025-05-29', NULL, ' Padavi Sri Pura ', 'uploads/Gallery/YCposts/post_68a8b7d0b71a83.92243685.jpg', 'concert', '2025-08-22 17:33:10', 1);
+INSERT INTO `posts` (`id`, `title`, `content`, `event_date`, `event_time`, `location`, `image_path`, `category`, `created_at`, `is_published`, `likes`) VALUES
+(36, 'Coke Kottu Beat Party', '', '2024-05-14', NULL, 'Ambalangoda', 'uploads/Gallery/YCposts/post_68a8b8cc5e50b4.43223844.jpeg', 'event', '2025-08-22 15:10:57', 1, 0),
+(37, 'Wannama', '', '2025-06-20', NULL, 'Katunayake', 'uploads/Gallery/YCposts/post_68a8b8c3235892.33741434.jpg', 'event', '2025-08-22 15:14:42', 1, 0),
+(39, 'Wannama', '', '2025-06-20', NULL, 'Katunayake', 'uploads/Gallery/YCposts/post_68a8b8bbb29d32.21500598.jpg', 'event', '2025-08-22 15:18:28', 1, 0),
+(40, 'Wannama', '', '2025-06-20', NULL, 'Katunayake', 'uploads/Gallery/YCposts/post_68a8b83e3374e2.71852623.jpg', 'event', '2025-08-22 15:19:59', 1, 0),
+(41, 'Coke Kottu Beat Party', '', '2024-05-24', NULL, 'Ambalangoda', 'uploads/Gallery/YCposts/post_68a8b83589ada1.11506246.jpg', 'event', '2025-08-22 15:31:30', 1, 0),
+(42, 'Battle of Maroons', '', '2025-03-04', NULL, 'Colombo', 'uploads/Gallery/YCposts/post_68a8b82d2832d6.17637525.jpg', 'concert', '2025-08-22 15:32:28', 1, 0),
+(43, 'Battle of Maroons', '', '2025-03-04', NULL, 'Colombo', 'uploads/Gallery/YCposts/post_68a8b823802015.41102562.jpg', 'event', '2025-08-22 15:34:21', 1, 0),
+(44, 'Battle of Maroons', '', '2025-03-04', NULL, 'Colombo', 'uploads/Gallery/YCposts/post_68a8b81b6fa6c1.44814964.jpg', 'event', '2025-08-22 15:34:57', 1, 0),
+(45, 'ODYSSEY MMXXV', '', '2025-03-07', NULL, 'SLIIT Malabe', 'uploads/Gallery/YCposts/post_68a8b80dcc59d0.31894808.jpeg', 'concert', '2025-08-22 17:24:03', 1, 0),
+(46, 'Ravana', '', '2024-11-25', NULL, 'Nelum Pokuna Mahinda Rajapaksa Theatre', 'uploads/Gallery/YCposts/post_68a8b801d1a4d4.75961863.jpg', 'concert', '2025-08-22 17:25:11', 1, 1),
+(47, 'InterFlash', '', '2023-12-29', NULL, 'Nelum Kuluna Colombo', 'uploads/Gallery/YCposts/post_68a8b7f27a61c6.99927124.jpeg', 'concert', '2025-08-22 17:27:29', 1, 1),
+(48, 'Yaka', '', '2024-08-08', NULL, 'Colombo', 'uploads/Gallery/YCposts/post_68a8b7df8b5551.51396178.jpeg', 'event', '2025-08-22 17:31:28', 1, 1),
+(50, 'Padavi Sri Pura Yaka Live in Concert', '', '2025-05-29', NULL, 'Padavi Sri Pura ', 'uploads/Gallery/YCposts/1756221729_post_image13.jpg', 'concert', '2025-08-26 15:22:09', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -178,7 +181,7 @@ CREATE TABLE `slider_images` (
   `caption` varchar(255) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `slider_images`
@@ -209,7 +212,7 @@ CREATE TABLE `songs` (
   `category` varchar(100) DEFAULT NULL,
   `music_category` varchar(100) DEFAULT NULL,
   `hits` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `songs`
@@ -240,7 +243,7 @@ CREATE TABLE `users` (
   `email` varchar(100) DEFAULT NULL,
   `role` varchar(20) DEFAULT 'admin',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -257,7 +260,7 @@ CREATE TABLE `video` (
   `description` text DEFAULT NULL,
   `video_path` varchar(1024) DEFAULT NULL,
   `upload_date` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `video`
@@ -282,7 +285,7 @@ CREATE TABLE `whats_new` (
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `whats_new`
@@ -379,19 +382,19 @@ ALTER TABLE `band_members`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `event_images`
 --
 ALTER TABLE `event_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `slider_images`

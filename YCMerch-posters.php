@@ -14,7 +14,7 @@ $posters = $stmt->fetchAll();
   <link rel="stylesheet" href="css/YCMerch-tshirts.css" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
   <style>
-    
+    /* Remove margin-top and match navbar style to YCMerch-merch1.php */
     * {
       margin: 0;
       padding: 0;
@@ -72,6 +72,7 @@ $posters = $stmt->fetchAll();
   border-bottom: 2px solid white;
 }
 
+/* Single underline fix: keep underline on <li>, never on <a> (prevents double lines) */
 .nav-links > li > a,
 .nav-links > li > a:link,
 .nav-links > li > a:visited,
@@ -83,6 +84,7 @@ $posters = $stmt->fetchAll();
   border-bottom: none !important;
 }
 
+/* Keep underline only from these rules */
 .nav-links > li:hover,
 .nav-links > li.active {
   border-bottom: 2px solid #fff;
@@ -145,6 +147,24 @@ $posters = $stmt->fetchAll();
 
 .dropdown li a:hover {
   color: white;
+}
+
+/* Ensure footer stays at the bottom */
+html, body {
+  height: 100%;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main, .main, .container, .content, .merch-container, .blog-container, .gallery-container {
+  flex: 1 0 auto;
+}
+footer {
+  flex-shrink: 0;
+  width: 100%;
+  margin-top: auto;
 }
   </style>
 
@@ -218,5 +238,7 @@ document.addEventListener('DOMContentLoaded', updateMerchCartCount);
 
 
   </div>
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>

@@ -1,8 +1,7 @@
 <?php
 
-// TODO: Make sure you have the Stripe PHP library installed via Composer.
-// Run `composer require stripe/stripe-php` in your project directory.
-require_once __DIR__ . '/./YCEvent-vendor/autoload.php';
+// Use Composer's vendor autoload for Stripe
+require_once __DIR__ . '/YCEvent-vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -32,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $input = json_decode(file_get_contents('php://input'), true);
         $paymentMethodId = $input['payment_method_id'];
         $amount = $input['amount'];
-        $currency = strtolower($input['currency']);
+    // For test mode, force currency to USD (Stripe test mode does not support LKR)
+    $currency = 'usd';
         $email = $input['email'];
 
         // Create a PaymentIntent to charge the user
@@ -344,7 +344,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         body: JSON.stringify({
                             payment_method_id: paymentMethod.id,
                             amount: Math.round(totalAmount * 100), // Convert to cents
-                            currency: 'lkr',
+                            // For test mode, use USD (Stripe test mode does not support LKR)
+                            currency: 'usd',
                             email: email.value.trim(),
                         }),
                     });

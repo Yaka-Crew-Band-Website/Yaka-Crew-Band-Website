@@ -102,14 +102,7 @@ body {
   box-shadow: 0 0 10px goldenrod;
 }
 
-footer {
-  text-align: center;
-  margin-top: 60px;
-  padding-top: 20px;
-  border-top: 1px solid #333;
-  color: #666;
-  font-size: 14px;
-}
+
 
 .price {
   display: block;

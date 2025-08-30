@@ -32,9 +32,19 @@ if (!$post) {
 </header>
 
 <div class="post-container">
-  <?php if (!empty($post['image']) && file_exists('admin/uploads/' . $post['image'])): ?>
-    <img src="admin/uploads/<?= htmlspecialchars($post['image']) ?>" alt="Blog Image" style="max-width: 100%; height: auto; margin-bottom: 20px;">
-  <?php endif; ?>
+  <?php
+    $imagePathUploads = __DIR__ . '/uploads/Blogs/' . $post['image'];
+    $imagePathSource = __DIR__ . '/source/Blogs/' . $post['image'];
+    if (!empty($post['image'])) {
+      if (file_exists($imagePathUploads)) {
+        // Show from uploads/Blogs if exists
+  echo '<img src="uploads/Blogs/' . htmlspecialchars($post['image']) . '" alt="Blog Image" style="width:600px; height:600px; object-fit:cover; display:block; margin-bottom:20px;">';
+      } elseif (file_exists($imagePathSource)) {
+        // Fallback to source/Blogs if exists
+  echo '<img src="source/Blogs/' . htmlspecialchars($post['image']) . '" alt="Blog Image" style="width:600px; height:600px; object-fit:cover; display:block; margin-bottom:20px;">';
+      }
+    }
+  ?>
 
   <p><?= nl2br(htmlspecialchars($post['full_description'])) ?></p>
   <a href="YCBlogs-index.php" class="back-link">← Back to All Posts</a>
@@ -43,5 +53,7 @@ if (!$post) {
 
 
 
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>

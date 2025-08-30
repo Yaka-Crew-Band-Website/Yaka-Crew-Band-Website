@@ -415,5 +415,7 @@ foreach ($all_events as $event) {
       }
     });
   </script>
+
+<?php include_once 'footer.php'; ?>
 </body>
 </html>

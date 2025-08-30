@@ -3,6 +3,7 @@ require_once __DIR__ . '/YCdb_connection.php';
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
+// Fetch product using prepared statement
 $stmt = $pdo->prepare("SELECT * FROM tshirts WHERE id = ? LIMIT 1");
 $stmt->execute([$id]);
 $row = $stmt->fetch();
@@ -19,6 +20,7 @@ if ($row) {
   die("Product not found.");
 }
 
+// Handle add to cart POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $product_id = (int)$_POST['product_id'];
     $product_name = $name; // from fetched product
@@ -53,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding-top: 80px; /* Ensure nav bar doesn't overlap */
+      /* padding-top removed here to avoid double gap */
       overflow-x: hidden;
     }
     
@@ -123,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
   border-bottom: 2px solid white;
 }
 
+/* Single underline fix: keep underline on <li>, never on <a> (prevents double lines) */
 .nav-links > li > a,
 .nav-links > li > a:link,
 .nav-links > li > a:visited,
