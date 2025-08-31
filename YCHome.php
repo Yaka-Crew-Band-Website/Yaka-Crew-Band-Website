@@ -60,9 +60,7 @@ foreach ($candidates as $rel) {
       <li><a href="YCEvents.php">Events</a></li>
       <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
     </ul>
-     <button class="menu-btn" id="menuBtn" aria-label="Open navigation menu">
-      <span class="menu-icon"></span>
-    </button>
+    
   </nav>
 
   <script>

@@ -89,8 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin'] = true;
         $_SESSION['username'] = $username;
         $_SESSION['login_time'] = time();
-        
-        header("Location: admin/YCGalleryadmin.php");
+
+        header("Location: YCHome-admin.php");
         exit();
     } else {
         $error_message = 'Invalid username or password. Please use: admin / yakacrew2024';

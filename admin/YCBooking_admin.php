@@ -51,6 +51,27 @@ if (isset($_GET['page']) && $_GET['page'] === 'delete_booking' && isset($_GET['i
    <li><a href="../YCMerch-merch1.php">Merchandise Store</a></li>
       </ul>
     </div>
+    <?php if ($page === 'bookings'): ?>
+      <a href="../YCBooking-generate-pdf.php"  target="_blank" class="pdf-btn-custom">Generate PDF Report</a>
+     <style>
+    .pdf-btn-custom {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border: 1px solid #654922;
+      background-color: #000000;
+      font-weight: 500;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      cursor: pointer;
+    }
+    .pdf-btn-custom:hover {
+      background-color: #654922;
+      color: #fff;
+    }
+  </style>
+    <?php endif; ?>
     <a href="../YClogin.php?action=logout" class="logout-btn">Logout</a>
   </div>
 </div>

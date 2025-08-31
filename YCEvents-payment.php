@@ -1,5 +1,4 @@
 <?php
-
 // Use Composer's vendor autoload for Stripe
 require_once __DIR__ . '/YCEvent-vendor/autoload.php';
 
@@ -15,13 +14,14 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Database connection
+require_once __DIR__ . '/YCdb_connection.php';
+
 // Handle payment processing if it's a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // TODO: Replace this with your actual Stripe secret key from your Stripe dashboard.
     // This key is used for server-side operations and should be kept confidential.
     $stripeSecretKey = 'sk_test_51RzHBlDZKJyc4R9PEkyYtS2uTCrPt5J0039b4Y7FXkdoeiRA87s5lTMrTxGaImaVRbrzAYDOkOPmbVbzxVxYpLiF00OXUzS6kT'; // Your test secret key
-
-    
     
     try {
         // Initialize the Stripe client
@@ -31,9 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $input = json_decode(file_get_contents('php://input'), true);
         $paymentMethodId = $input['payment_method_id'];
         $amount = $input['amount'];
-    // For test mode, force currency to USD (Stripe test mode does not support LKR)
-    $currency = 'usd';
+        // For test mode, force currency to USD (Stripe test mode does not support LKR)
+        $currency = 'usd';
         $email = $input['email'];
+        $cardholderName = $input['cardholder_name'];
+        $cartData = $input['cart_data'];
 
         // Create a PaymentIntent to charge the user
         $paymentIntent = \Stripe\PaymentIntent::create([
@@ -53,6 +55,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         if ($paymentIntent->status === 'succeeded') {
+            // Save each event purchase to the database
+            foreach ($cartData as $item) {
+                $eventId = $item['id'];
+                $quantity = $item['quantity'];
+                $unitPrice = $item['price'];
+                $totalPrice = $unitPrice * $quantity;
+                
+                // Insert into event_sales table
+                $stmt = $pdo->prepare("INSERT INTO event_sales (event_id, quantity, unit_price, total_price, buyer_name, buyer_email) 
+                                      VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$eventId, $quantity, $unitPrice, $totalPrice, $cardholderName, $email]);
+                
+                // Debug: Check if insertion was successful
+                if ($stmt->rowCount() > 0) {
+                    error_log("Successfully inserted sale for event ID: $eventId");
+                } else {
+                    error_log("Failed to insert sale for event ID: $eventId");
+                }
+            }
+
             $mail = new PHPMailer(true);
 
             try {
@@ -344,9 +366,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         body: JSON.stringify({
                             payment_method_id: paymentMethod.id,
                             amount: Math.round(totalAmount * 100), // Convert to cents
-                            // For test mode, use USD (Stripe test mode does not support LKR)
                             currency: 'usd',
                             email: email.value.trim(),
+                            cardholder_name: cardholderName.value.trim(),
+                            cart_data: checkoutCart // Send cart data to server
                         }),
                     });
                     
