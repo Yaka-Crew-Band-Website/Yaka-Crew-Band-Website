@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+// Check if user is logged in as admin, redirect to login if not
+if (!isset($_SESSION['admin'])) {
+    header("Location: YClogin.php");
+    exit();
+}
+
 require_once __DIR__ . '/YCdb_connection.php';
 
 // Handle form submissions
