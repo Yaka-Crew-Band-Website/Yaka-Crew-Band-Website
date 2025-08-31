@@ -34,8 +34,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 <div class="right-nav">
     <div class="view-dropdown">
       <a href="#" class="view-btn">View ▼</a>
-    <ul class="view-dropdown-menu">
-  <li><a href="YCHome.php">Home</a></li>
+      <ul class="view-dropdown-menu">
+        <li><a href="YCHome.php">Home</a></li>
         <li class="gallery-submenu">
           <a id="galleryViewDropdownLink" role="button" tabindex="0" style="cursor:pointer;">Gallery ▶</a>
           <ul class="gallery-submenu-items">
@@ -43,13 +43,32 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
             <li><a href="YCGallery.php">Video</a></li>
           </ul>
         </li>
-    <li><a href="YCBooking-index.php">Bookings</a></li>
-       <li><a href="YCEvents.php">Events</a></li>
-    <li><a href="YCBlogs-index.php">Blogs</a></li>
-    <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+        <li><a href="YCBooking-index.php">Bookings</a></li>
+        <li><a href="YCEvents.php">Events</a></li>
+        <li><a href="YCBlogs-index.php">Blogs</a></li>
+        <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
       </ul>
     </div>
-  <a href="YClogin.php?action=logout" class="logout-btn">Logout</a>
+<a href="YCMerch-generate-pdf.php"  target="_blank" class="pdf-btn-custom">Generate PDF Report</a>
+     <style>
+    .pdf-btn-custom {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border: 1px solid #654922;
+      background-color: #000000;
+      font-weight: 500;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      cursor: pointer;
+    }
+    .pdf-btn-custom:hover {
+      background-color: #654922;
+      color: #fff;
+    }
+  </style>
+    <a href="YClogin.php?action=logout" class="logout-btn">Logout</a>
   </div>
 </div>
 

@@ -56,30 +56,48 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
 <!-- Navigation -->
 <div class="navbar">
-  <div class="logo">
-    <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo" style="width: 120px; height: auto;">
-  </div>
-  <div class="right-nav">
-    <div class="view-dropdown">
-      <a href="#" class="view-btn">View ▼</a>
-                        <ul class="view-dropdown-menu">
+    <div class="logo">
+        <img src="assets/images/Yaka Crew Logo.JPG" alt="Yaka Crew Logo" style="width: 120px; height: auto;">
+    </div>
+    <div class="right-nav">
+        <div class="view-dropdown">
+            <a href="#" class="view-btn">View ▼</a>
+            <ul class="view-dropdown-menu">
                 <li><a href="YCHome.php">Home</a></li>
-             <li class="gallery-submenu">
-                  <a id="galleryViewDropdownLink" role="button" tabindex="0" style="cursor:pointer;">Gallery ▶</a>
+                <li class="gallery-submenu">
+                    <a id="galleryViewDropdownLink" role="button" tabindex="0" style="cursor:pointer;">Gallery ▶</a>
                     <ul class="gallery-submenu-items">
                         <li><a href="YCPosts.php">Music</a></li>
                         <li><a href="YCGallery.php">Video</a></li>
                     </ul>
                 </li>
-                
-    <li><a href="YCBooking-index.php">Bookings</a></li>
-       <li><a href="YCEvents.php">Events</a></li>
-    <li><a href="YCBlogs-index.php">Blogs</a></li>
-    <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
-      </ul>
+                <li><a href="YCBooking-index.php">Bookings</a></li>
+                <li><a href="YCEvents.php">Events</a></li>
+                <li><a href="YCBlogs-index.php">Blogs</a></li>
+                <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+            </ul>
+        </div>
+       <a href="YCEvents-generate-pdf.php"  target="_blank" class="pdf-btn-custom">Generate PDF Report</a>
+     <style>
+    .pdf-btn-custom {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border: 1px solid #654922;
+      background-color: #000000;
+      font-weight: 500;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      cursor: pointer;
+    }
+    .pdf-btn-custom:hover {
+      background-color: #654922;
+      color: #fff;
+    }
+  </style>
+        <a href="YCEvents-login.php?action=logout" class="logout-btn">Logout</a>
     </div>
-    <a href="YCEvents-login.php?action=logout" class="logout-btn">Logout</a>
-  </div>
 </div>
 
 <!-- Main Container -->
@@ -155,9 +173,6 @@ switch ($page) {
                     ?>
                     <p><?php echo $count; ?></p>
                 </div>
-                
-             
-                
                 <div class="stat-card">
                     <h3>Slider Images</h3>
                     <?php
@@ -167,7 +182,6 @@ switch ($page) {
                     <p><?php echo $count; ?></p>
                 </div>
             </div>
-            
             <!-- Quick Links -->
             <div class="quick-links">
                 <a href="?page=events&subpage=manage" class="btn btn-primary">Manage Events</a>
@@ -192,7 +206,6 @@ switch ($page) {
             <div class="action-bar">
                 <a href="?page=events&subpage=add" class="btn btn-primary">Add New Event</a>
             </div>
-            
             <table class="events-table">
                 <thead>
                     <tr>

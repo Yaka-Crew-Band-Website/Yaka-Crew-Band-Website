@@ -56,9 +56,7 @@ $categories = $category_stmt->fetchAll();
       <li><a href="YCEvents.php">Events</a></li>
       <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
     </ul>
-    <button class="menu-btn" id="menuBtn" aria-label="Open navigation menu">
-      <span class="menu-icon"></span>
-    </button>
+  
   </nav>
 
   <script>
@@ -156,6 +154,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const likeId = btn.getAttribute('data-like-id');
     const postId = btn.getAttribute('data-post-id');
     const countSpan = btn.querySelector('.like-count');
+    // On page load, fetch like count for this post
+    fetch('YCPosts-like.php?post_id=' + encodeURIComponent(postId))
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          // Always show userLikes for regular users, adminLikes for admin
+          if (data.isAdmin) {
+            countSpan.textContent = data.adminLikes;
+          } else {
+            countSpan.textContent = data.userLikes;
+          }
+          // Store isAdmin flag for later use
+          btn.setAttribute('data-is-admin', data.isAdmin ? '1' : '0');
+        }
+      });
     let liked = localStorage.getItem(likeId + '-liked') === '1';
     if (liked) {
       btn.classList.add('liked');
@@ -163,8 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     btn.addEventListener('click', function() {
       if (btn.disabled) return;
-  // AJAX to YCPosts-like.php
-  fetch('YCPosts-like.php', {
+      fetch('YCPosts-like.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'post_id=' + encodeURIComponent(postId)
@@ -172,7 +184,12 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          countSpan.textContent = data.likes;
+          // Always show userLikes for regular users, adminLikes for admin
+          if (btn.getAttribute('data-is-admin') === '1') {
+            countSpan.textContent = data.adminLikes;
+          } else {
+            countSpan.textContent = data.userLikes;
+          }
           localStorage.setItem(likeId + '-liked', '1');
           btn.classList.add('liked');
           btn.disabled = true;

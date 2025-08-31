@@ -57,6 +57,52 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
    <li><a href="../YCMerch-merch1.php">Merchandise Store</a></li>
       </ul>
     </div>
+    <?php if ($page === 'music'): ?>
+      <a href="../YCMusic-generate-pdf.php" target="_blank" class="pdf-btn-custom">Generate PDF Report</a>
+     <style>
+    .pdf-btn-custom {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border: 1px solid #654922;
+      background-color: #000000;
+      font-weight: 500;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      cursor: pointer;
+    }
+    .pdf-btn-custom:hover {
+      background-color: #654922;
+      color: #fff;
+    }
+  </style>
+    <?php elseif ($page === 'video'): ?>
+      <a href="../YCVideo-generate-pdf.php" target="_blank" class="pdf-btn-custom">Generate PDF Report</a>
+     <style>
+    .pdf-btn-custom {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+      border: 1px solid #654922;
+      background-color: #000000;
+      font-weight: 500;
+      display: block;
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      cursor: pointer;
+    }
+    .pdf-btn-custom:hover {
+      background-color: #654922;
+      color: #fff;
+    }
+  </style>
+    <?php else: ?>
+      <form method="post" action="admin_report.php" style="display:inline; margin-left:20px;">
+        <input type="hidden" name="page" value="<?php echo htmlspecialchars($page); ?>">
+        <button type="submit" class="pdf-btn-custom">Generate PDF Report</button>
+      </form>
+    <?php endif; ?>
     <a href="../YClogin.php?action=logout" class="logout-btn">Logout</a>
   </div>
 </div>
@@ -87,9 +133,12 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 <?php
 switch ($page) {
   case 'home':
-    echo "<h2>Dashboard</h2>";
-    echo "<p>Welcome to the Yaka Crew Admin Panel. Use the navigation to manage different sections of your website.</p>";
-    break;
+  echo "<h2>Dashboard</h2>";
+  echo "<p>Welcome to the Yaka Crew Admin Panel. Use the navigation to manage different sections of your website.</p>";
+  echo '<form method="post" action="dashboard_report.php" style="margin-top:20px;">';
+  echo '<button type="submit" style="padding:10px 18px; background:#654922; color:#fff; border:none; border-radius:4px; font-size:16px; cursor:pointer;">Generate PDF Report</button>';
+  echo '</form>';
+  break;
 
   case 'music':
     echo "<h2>Music Management</h2>";
@@ -478,60 +527,60 @@ switch ($page) {
       <h2>Uploaded Video</h2>
       <?php
       try {
-  $stmt = $pdo->prepare("SELECT * FROM video ORDER BY id DESC LIMIT 10");
-  $stmt->execute();
-  $video = $stmt->fetchAll();
-  if ($video) {
+        $stmt = $pdo->prepare("SELECT * FROM video ORDER BY id DESC LIMIT 10");
+        $stmt->execute();
+        $video = $stmt->fetchAll();
+        if ($video) {
           echo '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">';
           foreach ($video as $item) {
             echo '<div style="border: 1px solid #654922; padding: 12px; border-radius: 8px; background: #000000; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">';
             echo '<h4 style="margin: 0 0 8px 0; color: white; font-size: 16px; line-height: 1.2;">' . htmlspecialchars($item['title']) . '</h4>';
-      // Try all possible cover image columns for video
-      $cover = '';
-      if (isset($item['cover_image']) && $item['cover_image']) {
-        $cover = $item['cover_image'];
-      } elseif (isset($item['thumbnail_path']) && $item['thumbnail_path']) {
-        $cover = $item['thumbnail_path'];
-      } elseif (isset($item['image_path']) && $item['image_path']) {
-        $cover = $item['image_path'];
-      }
-      if ($cover) {
-        // Check for video cover in source/Gallery/images/video first, then uploads/Gallery/covers/YCvideos
-        $image_exists = false;
-        $final_cover_path = '';
-        $filename = basename($cover);
-        $source_cover = '../source/Gallery/images/video/' . $filename;
-        $uploads_cover = '../uploads/Gallery/covers/YCvideos/' . $filename;
-        
-        if (file_exists($source_cover)) {
-          $final_cover_path = '../source/Gallery/images/video/' . $filename;
-          $image_exists = true;
-        } elseif (file_exists($uploads_cover)) {
-          $final_cover_path = '../uploads/Gallery/covers/YCvideos/' . $filename;
-          $image_exists = true;
-        }
-        
-        if ($image_exists) {
-          echo '<img src="' . htmlspecialchars($final_cover_path) . '" alt="Gallery Image" style="width: 100%; height: 100px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;">';
-        } else {
-          echo '<div style="width: 100%; height: 100px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 8px; font-size: 11px; color: #999;">No Image Available<br>(' . htmlspecialchars($cover) . ')</div>';
-        }
-      } else {
-        echo '<div style="width: 100%; height: 100px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 8px; font-size: 11px; color: #999;">No Image Available</div>';
-      }
-
+            // Try all possible cover image columns for video
+            $cover = '';
+            if (isset($item['cover_image']) && $item['cover_image']) {
+              $cover = $item['cover_image'];
+            } elseif (isset($item['thumbnail_path']) && $item['thumbnail_path']) {
+              $cover = $item['thumbnail_path'];
+            } elseif (isset($item['image_path']) && $item['image_path']) {
+              $cover = $item['image_path'];
+            }
+            if ($cover) {
+              // Check for video cover in source/Gallery/images/video first, then uploads/Gallery/covers/YCvideos
+              $image_exists = false;
+              $final_cover_path = '';
+              $filename = basename($cover);
+              $source_cover = '../source/Gallery/images/video/' . $filename;
+              $uploads_cover = '../uploads/Gallery/covers/YCvideos/' . $filename;
+              if (file_exists($source_cover)) {
+                $final_cover_path = '../source/Gallery/images/video/' . $filename;
+                $image_exists = true;
+              } elseif (file_exists($uploads_cover)) {
+                $final_cover_path = '../uploads/Gallery/covers/YCvideos/' . $filename;
+                $image_exists = true;
+              }
+              if ($image_exists) {
+                echo '<img src="' . htmlspecialchars($final_cover_path) . '" alt="Gallery Image" style="width: 100%; height: 100px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;">';
+              } else {
+                echo '<div style="width: 100%; height: 100px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 8px; font-size: 11px; color: #999;">No Image Available<br>(' . htmlspecialchars($cover) . ')</div>';
+              }
+            } else {
+              echo '<div style="width: 100%; height: 100px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 8px; font-size: 11px; color: #999;">No Image Available</div>';
+            }
             // Do NOT display the video player here; only show the cover image above
             echo '<div style="font-size: 13px; line-height: 1.3; color: white;">';
-            
             if (isset($item['music_category']) && $item['music_category']) {
-                echo '<p style="margin: 3px 0; color: white;"><strong>Music Category:</strong> ' . ucfirst(str_replace('_', ' ', htmlspecialchars($item['music_category']))) . '</p>';
+              echo '<p style="margin: 3px 0; color: white;"><strong>Music Category:</strong> ' . ucfirst(str_replace('_', ' ', htmlspecialchars($item['music_category']))) . '</p>';
             }
             if (isset($item['artist_name']) && $item['artist_name']) {
-                echo '<p style="margin: 3px 0; color: white;"><strong>Artist:</strong> ' . htmlspecialchars($item['artist_name']) . '</p>';
+              echo '<p style="margin: 3px 0; color: white;"><strong>Artist:</strong> ' . htmlspecialchars($item['artist_name']) . '</p>';
+            }
+            // Show hits as K/M if present and category is 'top'
+            if (isset($item['hits']) && isset($item['category']) && $item['category'] === 'top') {
+              echo '<p style="margin: 3px 0; color: white;"><strong>Hits:</strong> ' . htmlspecialchars(formatHitsCount($item['hits'])) . '</p>';
             }
             if (isset($item['description']) && $item['description']) {
-                $short_desc = mb_substr($item['description'], 0, 60);
-                echo '<p style="margin: 3px 0; color: white;"><strong>Description:</strong> ' . htmlspecialchars($short_desc) . (mb_strlen($item['description']) > 60 ? '...' : '') . '</p>';
+              $short_desc = mb_substr($item['description'], 0, 60);
+              echo '<p style="margin: 3px 0; color: white;"><strong>Description:</strong> ' . htmlspecialchars($short_desc) . (mb_strlen($item['description']) > 60 ? '...' : '') . '</p>';
             }
             echo '</div>';
             echo '<div style="margin-top: 10px; display: flex; gap: 8px; justify-content: center;">';
@@ -699,6 +748,10 @@ if (isset($item['artist_name']) && $item['artist_name']) {
           echo '<p><strong>Music Category:</strong> ' . $music_cat . '</p>';
           if (isset($item['artist_name']) && $item['artist_name']) {
             echo '<p><strong>Artist:</strong> ' . htmlspecialchars($item['artist_name']) . '</p>';
+          }
+          // Show hits as K/M if present (show for all, not just top)
+          if (isset($item['hits']) && is_numeric($item['hits']) && $item['hits'] > 0) {
+            echo '<p><strong>Hits:</strong> ' . htmlspecialchars(formatHitsCount($item['hits'])) . '</p>';
           }
           if (isset($item['description']) && $item['description']) {
             $short_desc = mb_substr($item['description'], 0, 60);
