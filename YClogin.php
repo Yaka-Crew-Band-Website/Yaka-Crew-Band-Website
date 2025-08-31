@@ -58,7 +58,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 
 // Check if already logged in (but allow access if force_login is set)
 if (isset($_SESSION['admin']) && !isset($_GET['force_login'])) {
-    header("Location: admin/YCGalleryadmin.php");
+    header("Location: YCHome-admin.php");
     exit();
 }
 
