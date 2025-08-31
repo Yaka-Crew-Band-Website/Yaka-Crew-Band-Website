@@ -142,9 +142,6 @@ switch ($page) {
 
   echo "<h2>Dashboard</h2>";
   echo "<p>Welcome to the Yaka Crew Admin Panel. Use the navigation to manage different sections of your website.</p>";
-  echo '<form method="post" action="dashboard_report.php" style="margin-top:20px;">';
-  echo '<button type="submit" style="padding:10px 18px; background:#654922; color:#fff; border:none; border-radius:4px; font-size:16px; cursor:pointer;">Generate PDF Report</button>';
-  echo '</form>';
   break;
 >>>>>>> main
 
