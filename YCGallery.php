@@ -76,6 +76,7 @@ try {
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+
   <!-- Responsive Navigation Bar -->
   <nav class="navbar">
     <div class="logo">
@@ -83,18 +84,22 @@ try {
     </div>
   
     <ul class="nav-links" id="navLinks">
+>>>>>>> main
       <li><a href="YCHome.php">Home</a></li>
       <li class="gallery-dropdown">
         Gallery <span class="arrow">&#9662;</span>
         <ul class="dropdown">
+
           <li><a href="YCPosts.php">Music</a></li>
           <li><a href="YCGallery.php">Video</a></li>
+>>>>>>> main
         </ul>
       </li>
       <li><a href="YCBlogs-index.php">Blogs</a></li>
       <li><a href="YCBooking-index.php">Bookings</a></li>
       <li><a href="YCEvents.php">Events</a></li>
       <li><a href="YCMerch-merch1.php">Merchandise Store</a></li>
+
     </ul>
    
    
@@ -112,6 +117,7 @@ try {
       }
     });
   </script>
+>>>>>>> main
 
   <!-- Cover Wallpaper -->
 <div class="cover">
@@ -1181,6 +1187,7 @@ document.addEventListener('DOMContentLoaded', function() {
     videoCloseBtn.addEventListener('click', function() {
       videoPlayerModal.classList.remove('show');
             if (videoPlayer) {
+
     if (document.pictureInPictureElement !== videoPlayer) {
       videoPlayer.pause();
       videoPlayer.currentTime = 0;
@@ -1189,6 +1196,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (videoSourceOgg) videoSourceOgg.src = '';
       videoPlayer.load();
     }
+>>>>>>> main
       }
             if (ytPlayer && ytApiReady) { try { ytPlayer.stopVideo(); } catch(_){} }
       if (youtubeContainer) youtubeContainer.style.display = 'none';
@@ -1321,7 +1329,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
   </script>
 
+
 <?php include_once 'footer.php'; ?>
+>>>>>>> main
 </body>
 </html>
 
