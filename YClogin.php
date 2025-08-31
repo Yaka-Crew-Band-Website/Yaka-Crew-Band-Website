@@ -89,8 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin'] = true;
         $_SESSION['username'] = $username;
         $_SESSION['login_time'] = time();
-        
-        header("Location: admin/YCGalleryadmin.php");
+
+
+        header("Location: YCHome-admin.php");
+>>>>>>> main
         exit();
     } else {
         $error_message = 'Invalid username or password. Please use: admin / yakacrew2024';
@@ -122,6 +124,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <form method="POST" class="form">
+
+
+          <?php if ($success_message): ?>
+          <div class="success-message" id="success-message" style="margin-bottom: 18px;">
+            <?php echo htmlspecialchars($success_message); ?>
+          </div>
+          <?php endif; ?>
+
+          <?php if ($error_message): ?>
+          <div class="error-message show" style="margin-bottom: 18px;">
+            <?php echo htmlspecialchars($error_message); ?>
+          </div>
+          <?php endif; ?>
+
+>>>>>>> main
           <div class="form-group">
             <label for="username">Username</label>
             <div class="input-container">
@@ -152,27 +169,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 
-          <?php if ($success_message): ?>
-          <div class="success-message" id="success-message">
-            <?php echo htmlspecialchars($success_message); ?>
-          </div>
-          <?php endif; ?>
 
-          <?php if ($error_message): ?>
-          <div class="error-message show">
-            <?php echo htmlspecialchars($error_message); ?>
-          </div>
-          <?php endif; ?>
-
+>>>>>>> main
           <button type="submit" class="login-btn">
             <span class="btn-text">Sign In</span>
           </button>
         </form>
 
         <div class="login-footer">
-          <p>Default Credentials:</p>
-          <p><strong>Username:</strong> admin</p>
-          <p><strong>Password:</strong> yakacrew2024</p>
+
+>>>>>>> main
           <?php if (isset($_SESSION['admin'])): ?>
           <p class="force-login-link">
             <a href="login.php?force_login=1">
@@ -190,7 +196,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     document.getElementById('toggle-password').addEventListener('click', function() {
         const passwordInput = document.getElementById('password');
         const icon = this.querySelector('i');
-        
+
+>>>>>>> main
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
             icon.className = 'fas fa-eye-slash';
@@ -200,6 +207,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     });
 
+
+    // Fade out error message after 1200ms
+    setTimeout(function() {
+      var errorMsg = document.querySelector('.error-message.show');
+      if (errorMsg) {
+        errorMsg.style.transition = 'opacity 0.5s';
+        errorMsg.style.opacity = '0';
+        setTimeout(function() {
+          errorMsg.style.display = 'none';
+        }, 500);
+      }
+    }, 1200);
+
+>>>>>>> main
     // Clear URL parameters after showing logout message
     <?php if ($show_logout_message): ?>
     setTimeout(function() {
@@ -207,11 +228,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const successMessage = document.getElementById('success-message');
         if (successMessage) {
             successMessage.style.opacity = '0';
-            
+
             // Remove the element after fade out
             setTimeout(function() {
                 successMessage.style.display = 'none';
-                
+>>>>>>> main
                 // Remove the message parameter from URL without refreshing
                 const url = new URL(window.location);
                 url.searchParams.delete('message');
